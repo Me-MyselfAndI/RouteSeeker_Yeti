@@ -5,18 +5,19 @@ import static java.lang.Math.pow;
 
 
 public class Robot {
+    final int maxCargo = 5;
     Cell pos;
     int cargo;
-    double maxAcc, shootingdT;
+    double maxAcc, shootingTime;
     ArrayList <RobotSequenceRecord> sequence;
     Vector vel;
     boolean running;
 
-    public Robot (Cell pos, double maxAcc, double shootingdT, int cargo) {
+    public Robot (Cell pos, double maxAcc, double shootingTime, int cargo) {
         running = true;
         this.pos = pos;
         this.maxAcc = maxAcc;
-        this.shootingdT = shootingdT;
+        this.shootingTime = shootingTime;
         sequence = new ArrayList<RobotSequenceRecord>();
         this.cargo = cargo;
         vel = new Vector(0, 0);
@@ -25,7 +26,7 @@ public class Robot {
     private static Vector stochasticAcceleration (Robot robot, double stochasticConstant, double avgFieldValue) {
         Random rand = new Random();
         // Создаем ускорение, равное value-вектору, scaled в случайное (в дальнейшем - мб неслучайное) значение не более maxAcc/avgFieldValue раз
-        Vector acc = avgFieldValue == 0 ? new Vector(0, 0): robot.pos.value.dot(rand.nextDouble()*robot.maxAcc/avgFieldValue);
+        Vector acc = avgFieldValue == 0 ? new Vector(0, 0) : robot.pos.value.dot(rand.nextDouble()*robot.maxAcc/avgFieldValue);
         // Добавляем к нему стохастический вектор, по модулю не больший, чем maxAcc*stochasticConstant
         acc.add(new Vector(robot.maxAcc*stochasticConstant*rand.nextDouble(), (rand.nextDouble()*2 - 1)*Math.PI));
         // Если вышло по модулю более, чем maxAcc, то уменьшаем до maxAcc
@@ -34,11 +35,16 @@ public class Robot {
         return acc;
     }
 
-    public Cell move (Cell[][] field, double dT, double stochasticConstant, double avgFieldValue){    // Сделать так, чтобы от totalFieldValue зависело ускорение
+    public Cell move (Cell[][] field, double dT, double stochasticConstant, double avgFieldValue, double remainingTime){    // Сделать так, чтобы от totalFieldValue зависело ускорение
         // The greater is proximity coefficient, the greater influence will the stochastic vector have onto the process.
 
         if (pos.type == 's') {
-            IT IS NOT FINISHED HERE
+            remainingTime -= cargo*shootingTime;
+            cargo = 0;
+            vel = new Vector(0, 0);
+        }
+        else if (pos.type == 'l' && cargo < maxCargo) {
+            cargo ++;
         }
 
         Vector acc = stochasticAcceleration(this, stochasticConstant, avgFieldValue);
@@ -52,14 +58,22 @@ public class Robot {
          we have to ADD the x-component, but SUBTRACT the y-component
          */
         sequence.add(new RobotSequenceRecord(pos, acc));
+        vel.add(acc.dot(dT));
 
-        if (pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y))) {
+
+
+        if (remainingTime > dT && pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y))) {
             pos = field[pos.y + (int) deltaPos.y][pos.x + (int) deltaPos.x];
-            vel = new Vector(vel.plus(acc.dot(dT)));
-        }
-        else {
-            running = false;
-            vel = new Vector(vel.plus(acc.dot(dT)));
+            return move(field, dT, stochasticConstant, avgFieldValue, remainingTime - dT);
+            /*
+            if (pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y))) {
+                pos = field[pos.y + (int) deltaPos.y][pos.x + (int) deltaPos.x];
+                vel = new Vector(vel.plus(acc.dot(dT)));
+            } else {
+                running = false;
+                vel = new Vector(vel.plus(acc.dot(dT)));
+            }
+            */
         }
         return pos;
     }
