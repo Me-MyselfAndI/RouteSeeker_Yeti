@@ -2,6 +2,7 @@ public class Cell {
     int x, y;
     Vector value;
     char type;
+    int timesMutated = 1;
 
     public Cell (char type){
         this.type = type;
@@ -45,6 +46,13 @@ public class Cell {
             return -1;
         }
         else return 0;
+    }
+
+    public void mutateValueAVG (Vector b) {
+        value = value.dot(timesMutated);
+        value = value.plus(b);
+        value = value.dot(1.0/(timesMutated+1));
+        timesMutated ++;
     }
 
 }
