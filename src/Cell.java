@@ -6,7 +6,7 @@ public class Cell {
 
     public Cell (char type){
         this.type = type;
-        value = new Vector(0, 0); 
+        value = new Vector(0, 0);
     }
 
     public Cell (int y, int x) {

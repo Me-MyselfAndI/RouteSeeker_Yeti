@@ -43,7 +43,7 @@ public class Vector {
     public static Vector CreateFromCortesian (double x, double y) {
         if (x == 0)
             return new Vector(y, Math.PI/2);
-        double angle = Math.atan(y/x);
+        double angle = Math.acos(x/(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))));
         return new Vector(x/Math.cos(angle), angle);
     }
 
@@ -61,10 +61,17 @@ public class Vector {
     }
 
 
-    public static void main(String[] args) {
-        Vector a = new Vector(0, 0);
-        a.add(new Vector(10, Math.PI/3));
-        System.out.println(a);
+    public boolean containsPoint (double xCoord, double yCoord) {
+        Vector vector = Vector.CreateFromCortesian(xCoord, yCoord);
+        return this.getAngle() == vector.getAngle() && vector.getValue() < this.getValue();
     }
 
+
+
+
+
+    public static void main(String[] args) {
+        Vector a = Vector.CreateFromCortesian(6, 8);
+        System.out.println(a.containsPoint(3, 4));
+    }
 }

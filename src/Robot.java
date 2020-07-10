@@ -38,14 +38,7 @@ public class Robot {
     public Cell move (Cell[][] field, double dT, double stochasticConstant, double avgFieldValue, double remainingTime){    // Сделать так, чтобы от totalFieldValue зависело ускорение
         // The greater is proximity coefficient, the greater influence will the stochastic vector have onto the process.
 
-        if (pos.type == 's') {
-            remainingTime -= cargo*shootingTime;
-            cargo = 0;
-            vel = new Vector(0, 0);
-        }
-        else if (pos.type == 'l' && cargo < maxCargo) {
-            cargo ++;
-        }
+
 
         Vector acc = stochasticAcceleration(this, stochasticConstant, avgFieldValue);
         Vector deltaPos = new Vector(vel.dot(dT).plus(acc.dot(pow(dT, 2)/2)));  // Using dP = v_0*t + at^2/2
@@ -57,7 +50,16 @@ public class Robot {
          * Due to the cells being numbered from left to right, and from top to bottom and all vectors being also from left to right, but from bottom to top,
          we have to ADD the x-component, but SUBTRACT the y-component
          */
-        sequence.add(new RobotSequenceRecord(pos, acc));
+        sequence.add(new RobotSequenceRecord(pos, acc, cargo));
+        if (pos.type == 's') {
+            remainingTime -= cargo*shootingTime;
+            cargo = 0;
+            vel = new Vector(0, 0);
+        }
+        else if (pos.type == 'l' && cargo < maxCargo) {
+            cargo ++;
+        }
+
         vel.add(acc.dot(dT));
 
 
@@ -76,5 +78,10 @@ public class Robot {
             */
         }
         return pos;
+    }
+
+    private boolean wayIsClear (Cell[] point) { // 0th is starting point, 1st is finishing point
+
+        return false;
     }
 }
