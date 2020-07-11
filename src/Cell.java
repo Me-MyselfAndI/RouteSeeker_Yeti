@@ -1,10 +1,10 @@
 public class Cell {
     int x, y;
     Vector value;
-    char type;
+    String type;
     int timesMutated = 1;
 
-    public Cell (char type){
+    public Cell (String type){
         this.type = type;
         value = new Vector(0, 0);
     }
@@ -15,13 +15,13 @@ public class Cell {
         value = new Vector(0, 0);
     }
 
-    public Cell (int y, int x, char type) {
+    public Cell (int y, int x, String type) {
         this (y, x);
         this.type = type;
         value = new Vector(0, 0);
     }
 
-    public Cell (int y, int x, char type, Vector value) {
+    public Cell (int y, int x, String type, Vector value) {
         this (y, x, type);
         this.value = value;
     }
@@ -34,8 +34,8 @@ public class Cell {
         return "" + type;
     }
 
-    public boolean check (Cell[][] field, int dx, int dy) {
-        return !(((y + dy < 0 || y + dy >= field.length) || (x + dx < 0 || x + dx >= field[0].length)) || field[y + dy][x + dx].type == 'w');
+    public boolean check (Cell[][] field, double dx, double dy) {
+        return !(((y + dy < 0 || y + dy >= field.length) || (x + dx < 0 || x + dx >= field[0].length)) || field[(int) Math.ceil(y + dy)][(int) Math.ceil(x + dx)].type == "w");
     }
 
     public int changeCargo () {

@@ -63,15 +63,25 @@ public class Vector {
 
     public boolean containsPoint (double xCoord, double yCoord) {
         Vector vector = Vector.CreateFromCortesian(xCoord, yCoord);
-        return this.getAngle() == vector.getAngle() && vector.getValue() < this.getValue();
+        return this.getAngle() == vector.getAngle() && vector.getValue() <= this.getValue();
     }
 
+    /*public  boolean wayIsClear (Cell[][] field, Cell pos) {
+        return Vector.wayIsClear(field, pos, this);
+    }*/
 
+/*    public static boolean wayIsClear (Cell[][] field, Cell pos, Vector dPos) {
+        if (!pos.check(field, dPos.x, dPos.y)) return false;
+
+        //Cell [][] fieldSnippet = new Cell[(int) Math.ceil (Math.abs(dPos.y))][(int) Math.ceil (Math.abs(dPos.x))];
+        Cell botLeft = field[(int) Math.max(pos.y, pos.y - dPos.y)][pos.x + (int) Math.min(0, dPos.x)] {}
+    }
+*/
 
 
 
     public static void main(String[] args) {
         Vector a = Vector.CreateFromCortesian(6, 8);
-        System.out.println(a.containsPoint(3, 4));
+        System.out.println(a.containsPoint(6, 8));
     }
 }

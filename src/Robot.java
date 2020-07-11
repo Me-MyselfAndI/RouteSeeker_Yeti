@@ -10,6 +10,7 @@ public class Robot {
     int cargo;
     double maxAcc, shootingTime;
     ArrayList <RobotSequenceRecord> sequence;
+    private ArrayList <Cell> usedCargo;
     Vector vel;
     boolean running;
 
@@ -19,6 +20,7 @@ public class Robot {
         this.maxAcc = maxAcc;
         this.shootingTime = shootingTime;
         sequence = new ArrayList<RobotSequenceRecord>();
+        usedCargo = new ArrayList<Cell>();
         this.cargo = cargo;
         vel = new Vector(0, 0);
     }
@@ -44,18 +46,26 @@ public class Robot {
             counter ++;
             acc = stochasticAcceleration(this, stochasticConstant, avgFieldValue);
             deltaPos = new Vector(vel.dot(dT).plus(acc.dot(pow(dT, 2) / 2)));  // Using dP = v_0*t + at^2/2
-        } while (counter < 11 && !pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y)));
+        } while (counter <= 15 && !pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y)));
         // Почему-то deltaPos портится при передаче в реальное движение
 
 
         sequence.add(new RobotSequenceRecord(pos, acc, cargo));
-        if (pos.type == 's') {
+        if (pos.type == "s") {
             remainingTime -= cargo*shootingTime;
             cargo = 0;
             vel = new Vector(0, 0);
         }
-        else if (pos.type == 'l' && cargo < maxCargo) {
-            cargo ++;
+        else if (pos.type == "l" && cargo < maxCargo) {
+            boolean cargoIsFree = true;
+            for (Cell temp : usedCargo) {
+                if (temp.equals(pos))
+                    cargoIsFree = false;
+            }
+            if (cargoIsFree) {
+                cargo++;
+                usedCargo.add(pos);
+            }
         }
 
         vel.add(acc.dot(dT));
