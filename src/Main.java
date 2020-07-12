@@ -3,12 +3,12 @@ import java.util.Random;
 
 public class Main {
 
-    final static int amountOfTrials = 250000;
+    final static int amountOfTrials = 350000;
     final static double cargoConstant = 0.8;   // Strategic value of having one more cargo
     final static double matchTime = 15;        // Match time in seconds
     final static double timePrecision = 15;    // This is how many tacts there are in one match
     final static double wallConstant = 0.05;      // The greater is this constant, the more points robot loses for bumping into a wall
-    public static double stochasticConstant = 0.7;   // This determines how much influence probability vector has
+    public static double stochasticConstant = 0.6;   // This determines how much influence probability vector has
     public static double resultingScore;
     //final double startLineIncrement = 0.01;  // This determines how much the program adds to the good starting cells and subtracts from the bad ones
 
@@ -247,15 +247,17 @@ public class Main {
             //Здесь должно быть начисление очков
             double[] scoreMarks = new double[robot.sequence.size()];
             double maxScore = score;
-            for (int i = robot.sequence.size() - 1; i >= 0; i--) {
+            robot.sequence.add(new RobotSequenceRecord(new Cell(0, 0), new Vector(0, 0), robot.sequence.get(robot.sequence.size() - 1).cargo));
+            for (int i = robot.sequence.size() - 2; i >= 0; i--) {
 
                 Cell currCell = robot.sequence.get(i).cell;
                 int cargo = robot.sequence.get(i).cargo;
+                int prevCargo = robot.sequence.get(i+1).cargo;
 
                 output = ("(" + currCell.x + "; " + currCell.y + ") -->\n").concat(output);
 
                 // If the robot is on the loading kind of cell, and there is enough space to load, it should do that. Cargo increases by 1.
-                if (currCell.type == "l" && cargo < robot.maxCargo) {
+                if (cargo < prevCargo) {
                     output = "l ".concat(output);
                     score += cargoConstant;
                 }
@@ -272,12 +274,13 @@ public class Main {
 
             System.out.println(output);
             totalScore += score;    // Increasing the total score of all trials by this score
-
+            robot.sequence.remove(robot.sequence.size() - 1);
 
 
             if (maxScore > bestScore || (maxScore == bestScore && robot.sequence.size() < bestSequence.size())) {    // This is for recording the best possible sequence
                 if (bestScore != maxScore) {
                     numberOfBestScores = 0;
+                    nullFieldValues(totalValue);
                 }
                 bestScore = maxScore;
                 bestSequence = robot.sequence;
@@ -291,7 +294,30 @@ public class Main {
 
 
             // Here we will reassign values.
-            adjustFieldValues(robot, scoreMarks, totalValue, bestScore, maxScore, valueIsZero);
+            for (int i = robot.sequence.size() - 1; i > 1; --i) {       // DO NOT mutate values of the starting cell here.
+                // It is useless and leads to overwhelmingly high
+                // numbers on the starting line
+                RobotSequenceRecord currNode = robot.sequence.get(i);
+
+                totalValue -= currNode.cell.value.getValue();    // Every time we assign scores, the value changes. So, we subtract it here and add back the new after the value of the cell is changed
+                currNode.cell.mutateValueAVG (Vector.CreateFromCortesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i]/* - bestScore*0.2*/)*(maxScore == bestScore ? 70 : 1)));
+                totalValue += currNode.cell.value.getValue();
+
+                // Because the chance that some cell became zero after some number of changes is disappearingly small and
+                // doesn't affect anything, unless happens too often, it is ok to just mark any cell that ever got changed as nonzero
+                // for the sake of reducing O(n^2) of checking each cell for its value to O(n) of the following operation
+                valueIsZero[currNode.cell.y][currNode.cell.x] = false;
+
+            }
+
+            if (robot.sequence.size() > 0) {
+                RobotSequenceRecord lastNode = robot.sequence.get(robot.sequence.size() - 1);
+
+                totalValue -= lastNode.cell.value.getValue();
+                lastNode.cell.mutateValueAVG (Vector.CreateFromCortesian(-lastNode.acc.x, -lastNode.acc.y).dot((timePrecision-robot.sequence.size())*wallConstant));
+                System.out.println();
+                totalValue += lastNode.cell.value.getValue();
+            }
 
             if (score != robot.cargo*cargoConstant)
                 avgScoreForNonzeroTrials = (avgScoreForNonzeroTrials*(nonzeroTrialsAmount++) + score)/nonzeroTrialsAmount;
