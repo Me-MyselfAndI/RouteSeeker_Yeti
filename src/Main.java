@@ -10,7 +10,7 @@ public class Main {
     final static double wallConstant = 0.05;      // The greater is this constant, the more points robot loses for bumping into a wall
     public static double stochasticConstant = 0.6;   // This determines how much influence probability vector has
     public static double resultingScore;
-    //final double startLineIncrement = 0.01;  // This determines how much the program adds to the good starting cells and subtracts from the bad ones
+    //final double initLineIncrement = 0.01;  // This determines how much the program adds to the good starting cells and subtracts from the bad ones
 
 
     static Cell[][] field = {        // w = Wall/obstacle;    l = Loading station;    s = suitable to Shoot;     i = Initiation line
@@ -80,28 +80,28 @@ public class Main {
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")}
     };
 
-    public static Cell pickStartingPosition (int startRowNumber, double[] startLineValues, double totalStartLineValue) {
+    public static Cell pickStartingPosition (int startRowNumber, double[] initLineValues, double totalInitLineValue) {
         Random rand = new Random();
 
-        double randomStartLineValue = rand.nextDouble()*totalStartLineValue;
+        double randomInitLineValue = rand.nextDouble()*totalInitLineValue;
 
-        if (randomStartLineValue == totalStartLineValue || randomStartLineValue == 0) {
-            System.out.println("\tAlert: bad starting position" + (randomStartLineValue == 0 ? startLineValues.length - 1 : 0));
+        if (randomInitLineValue == totalInitLineValue || randomInitLineValue == 0) {
+            System.out.println("\tAlert: bad starting position" + (randomInitLineValue == 0 ? initLineValues.length - 1 : 0));
         }
 
         //  - Создать случайное число не более суммарного значения клеток
         //  - Цикл for, пока счетсик не достигнет этого числа
-        //  - Счетчик каждый раз растет на startLineValues[i]
+        //  - Счетчик каждый раз растет на initLineValues[i]
 
         int startCellXCoord;
-        for (startCellXCoord = startLineValues.length - 1; startCellXCoord > 1 && randomStartLineValue > 0.0005; randomStartLineValue -= startLineValues[startCellXCoord]) {
+        for (startCellXCoord = initLineValues.length - 1; startCellXCoord > 1 && randomInitLineValue > 0.0005; randomInitLineValue -= initLineValues[startCellXCoord]) {
             startCellXCoord--;
             if (startCellXCoord <= 1)
                 System.out.println("Look closer");
         }
 
         System.out.println(startCellXCoord);
-        if (startCellXCoord < 1 || startCellXCoord > startLineValues.length - 1) {
+        if (startCellXCoord < 1 || startCellXCoord > initLineValues.length - 1) {
             System.out.println("Alert");
         }
 
@@ -123,7 +123,7 @@ public class Main {
     private static void adjustFieldValues (Robot robot, double[] scoreMarks, double totalValue, double bestScore, double maxScore, boolean[][] valueIsZero) {
         for (int i = robot.sequence.size() - 1; i > 1; --i) {       // DO NOT mutate values of the starting cell here.
             // It is useless and leads to overwhelmingly high
-            // numbers on the starting line
+            // numbers on the initiation line
             RobotSequenceRecord currNode = robot.sequence.get(i);
 
             totalValue -= currNode.cell.value.getValue();    // Every time we assign scores, the value changes. So, we subtract it here and add back the new after the value of the cell is changed
@@ -166,8 +166,8 @@ public class Main {
         }
 
 
-        int startLine = 0;              // This needs to be outside of the loop, in order to be accessible later
-        for (; startLine < field.length && field[startLine][1].type != "i"; ++startLine);  // This finds startLine
+        int initLine = 0;              // This needs to be outside of the loop, in order to be accessible later
+        for (; initLine < field.length && field[initLine][1].type != "i"; ++initLine);  // This finds initLine
 
 
         double bestScore = -1;      // This stores the best achieved score out of all trials
@@ -183,20 +183,20 @@ public class Main {
 
 
 
-        // The following is an array storing data of how valuable each cell on the starting line is for being the starting cell.
-        double[] startLineValues = new double[field[startLine].length];
+        // The following is an array storing data of how valuable each cell on the initiation line is for being the starting cell.
+        double[] initLineValues = new double[field[initLine].length];
 
-        // Assigns initial values to the startLine. These are just scalars that indicate
+        // Assigns initial values to the initLine. These are just scalars that indicate
         // the likelihood of getting many points if started the game from the respective cell
-        for (int i = 1; i < startLineValues.length - 1; ++i) {
-            startLineValues[i] = 1;
+        for (int i = 1; i < initLineValues.length - 1; ++i) {
+            initLineValues[i] = 1;
         }
         // First and last cells are walls => the robot should not consider starting from there, so make their values zeros.
-        startLineValues[0] = 0;
-        startLineValues[startLineValues.length - 1] = 0;
+        initLineValues[0] = 0;
+        initLineValues[initLineValues.length - 1] = 0;
 
         // This array stores how many times did the robot start at every initial cell
-        double totalStartLineValue = startLineValues.length - 2;
+        double totalInitLineValue = initLineValues.length - 2;
 
 
 
@@ -210,14 +210,14 @@ public class Main {
                 // This lets the program avoid getting enormously slow close to 500,000th trial
 
 
-                for (int i = 1; i < startLineValues.length - 1; ++i) startLineValues[i] = 1;
-                startLineValues[0] = 0;
-                startLineValues[startLineValues.length - 1] = 0;
+                for (int i = 1; i < initLineValues.length - 1; ++i) initLineValues[i] = 1;
+                initLineValues[0] = 0;
+                initLineValues[initLineValues.length - 1] = 0;
 
-                for (int i = 1; i < startLineValues.length - 1; ++i) {
-                    startLineValues[i] = 1;
+                for (int i = 1; i < initLineValues.length - 1; ++i) {
+                    initLineValues[i] = 1;
                 }
-                totalStartLineValue = startLineValues.length - 2;
+                totalInitLineValue = initLineValues.length - 2;
             }
 
             //The following block is to calculate the total amount of nonzero-valued cells.
@@ -231,7 +231,7 @@ public class Main {
 
 
             // Creating the robot. The long expression of rand.nextInt(...) picks random cell except for the first and last one.
-            Robot robot = new Robot (pickStartingPosition(startLine, startLineValues, totalStartLineValue), 20, 1, 3);
+            Robot robot = new Robot (pickStartingPosition(initLine, initLineValues, totalInitLineValue), 20, 1, 3);
             double increment = matchTime/timePrecision; // This is an increment of time each "turn"
             System.out.println("\n\n\t\tTrial #" + trial);
 
@@ -296,7 +296,7 @@ public class Main {
             // Here we will reassign values.
             for (int i = robot.sequence.size() - 1; i > 1; --i) {       // DO NOT mutate values of the starting cell here.
                 // It is useless and leads to overwhelmingly high
-                // numbers on the starting line
+                // numbers on the initiation line
                 RobotSequenceRecord currNode = robot.sequence.get(i);
 
                 totalValue -= currNode.cell.value.getValue();    // Every time we assign scores, the value changes. So, we subtract it here and add back the new after the value of the cell is changed
@@ -322,9 +322,9 @@ public class Main {
             if (score != robot.cargo*cargoConstant)
                 avgScoreForNonzeroTrials = (avgScoreForNonzeroTrials*(nonzeroTrialsAmount++) + score)/nonzeroTrialsAmount;
 
-            double tempDiff = startLineValues[robot.sequence.get(0).cell.x] * (score > avgScoreForNonzeroTrials ? (startLineValues[robot.sequence.get(0).cell.x] > totalStartLineValue/15 ? 0 : 1.0) : (startLineValues[robot.sequence.get(0).cell.x] > 0.2 ? -0.0004 : 0));
-            startLineValues[robot.sequence.get(0).cell.x] += tempDiff;
-            totalStartLineValue += tempDiff;
+            double tempDiff = initLineValues[robot.sequence.get(0).cell.x] * (score > avgScoreForNonzeroTrials ? (initLineValues[robot.sequence.get(0).cell.x] > totalInitLineValue/15 ? 0 : 1.0) : (initLineValues[robot.sequence.get(0).cell.x] > 0.2 ? -0.0004 : 0));
+            initLineValues[robot.sequence.get(0).cell.x] += tempDiff;
+            totalInitLineValue += tempDiff;
 
             if (trial % 1000 <= 3) {
                 for (int i = 0; i < field.length; ++i) {
