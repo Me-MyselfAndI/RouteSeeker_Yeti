@@ -1,4 +1,5 @@
 
+
 public class Vector {
     double x, y;
 
@@ -65,18 +66,29 @@ public class Vector {
         Vector vector = Vector.CreateFromCortesian(xCoord, yCoord);
         return this.getAngle() == vector.getAngle() && vector.getValue() <= this.getValue();
     }
+    public boolean wayIsClear (Cell[][] field, Cell pos, double robotWidth) {
+        return Vector.wayIsClear(field, pos, this, robotWidth);
+    }
 
-    /*public  boolean wayIsClear (Cell[][] field, Cell pos) {
-        return Vector.wayIsClear(field, pos, this);
-    }*/
-
-/*    public static boolean wayIsClear (Cell[][] field, Cell pos, Vector dPos) {
+    public static boolean wayIsClear (Cell[][] field, Cell pos, Vector dPos, double robotWidth) {
         if (!pos.check(field, dPos.x, dPos.y)) return false;
 
-        //Cell [][] fieldSnippet = new Cell[(int) Math.ceil (Math.abs(dPos.y))][(int) Math.ceil (Math.abs(dPos.x))];
-        Cell botLeft = field[(int) Math.max(pos.y, pos.y - dPos.y)][pos.x + (int) Math.min(0, dPos.x)] {}
+        double dPosValue = dPos.getValue();
+        Vector increment = new Vector(0.4, dPos.getAngle());
+        for (Vector i = new Vector (0,0); i.getValue() <= dPosValue; i.add(increment)) {
+            Cell currCell = pos.shiftBy(field, i);
+            for (double xDim = -robotWidth; xDim <= robotWidth; xDim += robotWidth/2)
+                for (double yDim = -robotWidth; yDim <= robotWidth; yDim += robotWidth/2){
+                    if (!currCell.check(field, xDim, yDim) || currCell.shiftBy(field, CreateFromCortesian(xDim, yDim)).type.equals("w"))
+                        return false;
+                }
+
+        }
+
+        return true;
     }
-*/
+
+
 
 
 

@@ -5,6 +5,7 @@ import static java.lang.Math.pow;
 
 
 public class Robot {
+    final private double robotDimension = 2;  // Here place an upper-estimate on possible length/width of a robot.
     final int maxCargo = 5;
     Cell pos;
     int cargo;
@@ -40,22 +41,24 @@ public class Robot {
     public Cell move (Cell[][] field, double dT, double stochasticConstant, double avgFieldValue, double remainingTime){    // Сделать так, чтобы от totalFieldValue зависело ускорение
         // The greater is proximity coefficient, the greater influence will the stochastic vector have onto the process.
 
+        boolean wayIsClear;
         Vector acc, deltaPos;
         int counter = 0;
         do {
             counter ++;
             acc = stochasticAcceleration(this, stochasticConstant, avgFieldValue);
             deltaPos = new Vector(vel.dot(dT).plus(acc.dot(pow(dT, 2) / 2)));  // Using dP = v_0*t + at^2/2
-        } while (counter <= 15 && !pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y)));
+            wayIsClear = deltaPos.wayIsClear(field, pos, robotDimension);
+        } while (counter <= 15 && !wayIsClear/*pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y))*/);
         // Почему-то deltaPos портится при передаче в реальное движение
 
         sequence.add(new RobotSequenceRecord(pos, acc, cargo));
-        if (pos.type == "s") {
+        if (pos.type.equals("s")) {
             remainingTime -= cargo*shootingTime;
             cargo = 0;
             vel = new Vector(0, 0);
         }
-        else if (pos.type == "l" && cargo < maxCargo) {
+        else if (pos.type.equals("l") && cargo < maxCargo) {
             boolean cargoIsFree = true;
             for (Cell temp : usedCargo) {
                 if (temp.equals(pos))
@@ -71,7 +74,7 @@ public class Robot {
 
 
 
-        if (remainingTime > dT && pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y))) {
+        if (remainingTime > dT && wayIsClear) {
             pos = field[pos.y + (int) deltaPos.y][pos.x + (int) deltaPos.x];
             return move(field, dT, stochasticConstant, avgFieldValue, remainingTime - dT);
             /*
@@ -85,10 +88,5 @@ public class Robot {
             */
         }
         return pos;
-    }
-
-    private boolean wayIsClear (Cell[] point) { // 0th is starting point, 1st is finishing point
-
-        return false;
     }
 }
