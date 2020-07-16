@@ -3,11 +3,11 @@ import java.util.Random;
 
 public class Main {
 
-    final static int amountOfTrials = 300000;
+    final static int amountOfTrials = 350000;
     final static double cargoConstant = 0.8;   // Strategic value of having one more cargo
     final static double matchTime = 15;        // Match time in seconds
     final static double timePrecision = 15;    // This is how many tacts there are in one match
-    final static double wallConstant = 0;      // The greater is this constant, the more points robot loses for bumping into a wall
+    final static double wallConstant = 0.1;      // The greater is this constant, the more points robot loses for bumping into a wall
     public static double stochasticConstant = 0.7;   // This determines how much influence probability vector has
     public static double resultingScore;
     //final double initLineIncrement = 0.01;  // This determines how much the program adds to the good starting cells and subtracts from the bad ones
@@ -126,34 +126,6 @@ public class Main {
     }
 
 
-    private static void adjustFieldValues (Robot robot, double[] scoreMarks, double totalValue, double bestScore, double maxScore, boolean[][] valueIsZero) {
-        for (int i = robot.sequence.size() - 1; i > 1; --i) {       // DO NOT mutate values of the starting cell here.
-            // It is useless and leads to overwhelmingly high
-            // numbers on the initiation line
-            RobotSequenceRecord currNode = robot.sequence.get(i);
-
-            totalValue -= currNode.cell.value.getValue();    // Every time we assign scores, the value changes. So, we subtract it here and add back the new after the value of the cell is changed
-            currNode.cell.mutateValueAVG (Vector.CreateFromCortesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i]/* - bestScore*0.2*/)*(maxScore == bestScore ? 70 : 1)));
-            totalValue += currNode.cell.value.getValue();
-
-            // Because the chance that some cell became zero after some number of changes is disappearingly small and
-            // doesn't affect anything, unless happens too often, it is ok to just mark any cell that ever got changed as nonzero
-            // for the sake of reducing O(n^2) of checking each cell for its value to O(n) of the following operation
-            valueIsZero[currNode.cell.y][currNode.cell.x] = false;
-
-        }
-
-        if (robot.sequence.size() > 0) {
-            RobotSequenceRecord lastNode = robot.sequence.get(robot.sequence.size() - 1);
-
-            totalValue -= lastNode.cell.value.getValue();
-            lastNode.cell.mutateValueAVG (Vector.CreateFromCortesian(-lastNode.acc.x, -lastNode.acc.y).dot((timePrecision-robot.sequence.size())*wallConstant));
-            System.out.println();
-            totalValue += lastNode.cell.value.getValue();
-        }
-    }
-
-
     public static void main(String[] args) {
         Random rand = new Random();
 
@@ -170,7 +142,6 @@ public class Main {
                 valueIsZero[j][i] = true;
             }
         }
-
 
         int initLine = 0;              // This needs to be outside of the loop, in order to be accessible later
         for (; initLine < field.length && field[initLine][field[0].length/2].type != "i"; ++initLine);  // This finds initLine
@@ -215,7 +186,6 @@ public class Main {
                 // When total score reaches some particular mark, every cell's value gets divided by a constant.
                 // This lets the program avoid getting enormously slow close to 500,000th trial
 
-
                 for (int i = 1; i < initLineValues.length - 1; ++i) initLineValues[i] = 1;
                 initLineValues[0] = 0;
                 initLineValues[initLineValues.length - 1] = 0;
@@ -224,9 +194,10 @@ public class Main {
                     initLineValues[i] = 1;
                 }
                 totalInitLineValue = initLineValues.length - 2;
+
             }
 
-            //The following block is to calculate the total amount of nonzero-valued cells.
+            // The following block is to calculate the total amount of nonzero-valued cells.
             // It will be used for calculating the avg field value among nonzero cells
             int totalNonzeroValues = 0;
             for (boolean[] i:valueIsZero) {
@@ -239,21 +210,19 @@ public class Main {
             // Creating the robot. The long expression of rand.nextInt(...) picks random cell except for the first and last one.
             Robot robot = new Robot (pickStartingPosition(initLine, initLineValues, totalInitLineValue), 20, 1, 3);
             double increment = matchTime/timePrecision; // This is an increment of time each "turn"
-            System.out.println("\n\n\t\tTrial #" + trial);
+            System.out.println("\n\n\t\tTrial: L- " + (amountOfTrials - trial));
 
 
             robot.move(field, increment, stochasticConstant, totalValue/(totalNonzeroValues + 1), timePrecision);
-            RobotSequenceRecord bumpedInto = robot.sequence.get(robot.sequence.size() - 1);   // This cell will be used to penalize behaviour that led to bumping into the wall
 
 
-            System.out.println("End.");
             double score = cargoConstant*3 + 5;          // Here you should calculate what is a strategical value of having one more cargo already loaded at the end of the autonomous.
             String output = "";
 
             //Здесь должно быть начисление очков
             double[] scoreMarks = new double[robot.sequence.size()];
             double maxScore = score;
-            robot.sequence.add(new RobotSequenceRecord(new Cell(0, 0), new Vector(0, 0), robot.sequence.get(robot.sequence.size() - 1).cargo));
+            robot.sequence.add(new RobotSequenceRecord(new Cell(0, 0), new Vector(0, 0), robot.cargo));
             for (int i = robot.sequence.size() - 2; i >= 0; i--) {
 
                 Cell currCell = robot.sequence.get(i).cell;
@@ -275,7 +244,6 @@ public class Main {
                 if (score > maxScore)
                     maxScore = score;
                 scoreMarks[i] = maxScore;  // Record the running score into scoreMarks of the current cell
-                /*output = (" value will be changed by : " + (Vector.CreateFromCortesian(robot.sequence.get(i).acc.x, robot.sequence.get(i).acc.y).dot(scoreMarks[i]) + " ").concat (output));*/
             }
 
             System.out.println(output);
@@ -286,7 +254,6 @@ public class Main {
             if (maxScore > bestScore || (maxScore == bestScore && robot.sequence.size() < bestSequence.size())) {    // This is for recording the best possible sequence
                 if (bestScore != maxScore) {
                     numberOfBestScores = 0;
-                    nullFieldValues(totalValue);
                 }
                 bestScore = maxScore;
                 bestSequence = robot.sequence;
@@ -306,7 +273,7 @@ public class Main {
                 RobotSequenceRecord currNode = robot.sequence.get(i);
 
                 totalValue -= currNode.cell.value.getValue();    // Every time we assign scores, the value changes. So, we subtract it here and add back the new after the value of the cell is changed
-                currNode.cell.mutateValueAVG (Vector.CreateFromCortesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i]/* - bestScore*0.2*/)*(maxScore == bestScore ? 2 : 1)));
+                currNode.cell.mutateValueAVG (Vector.CreateFromCortesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i])*(maxScore == bestScore ? 2 : 1)));
                 totalValue += currNode.cell.value.getValue();
 
                 // Because the chance that some cell became zero after some number of changes is disappearingly small and
@@ -352,12 +319,12 @@ public class Main {
         resultingScore = bestScore;
 
         for (int i = 0; i < bestSequence.size(); ++i) {
-            bestSequence.get(i).cell.type += "\u001B[31m" + (i+1) + "\u001B[0m";
+            bestSequence.get(i).cell.type = "\u001B[31m" + (i+1) + "\u001B[0m";
         }
 
         for (int i = 0; i < field.length; ++i) {
             for (int j = 0; j < field[i].length; ++j) {
-                System.out.print(field[i][j] + " ");
+                System.out.print(field[i][j]);
             }
             System.out.println();
         }

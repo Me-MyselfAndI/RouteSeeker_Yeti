@@ -5,7 +5,7 @@ import static java.lang.Math.pow;
 
 
 public class Robot {
-    final private double robotDimension = 2;  // Here place an upper-estimate on possible length/width of a robot.
+    final private double robotDimension = 1;  // Here place an upper-estimate on possible length/width of a robot.
     final int maxCargo = 5;
     Cell pos;
     int cargo;
@@ -67,7 +67,6 @@ public class Robot {
             if (cargoIsFree) {
                 cargo++;
                 usedCargo.add(pos);
-                cargo = cargo;
             }
         }
         vel.add(acc.dot(dT));
@@ -77,15 +76,6 @@ public class Robot {
         if (remainingTime > dT && wayIsClear) {
             pos = field[pos.y + (int) deltaPos.y][pos.x + (int) deltaPos.x];
             return move(field, dT, stochasticConstant, avgFieldValue, remainingTime - dT);
-            /*
-            if (pos.check(field, (int) Math.round(deltaPos.x), (int) Math.round(deltaPos.y))) {
-                pos = field[pos.y + (int) deltaPos.y][pos.x + (int) deltaPos.x];
-                vel = new Vector(vel.plus(acc.dot(dT)));
-            } else {
-                running = false;
-                vel = new Vector(vel.plus(acc.dot(dT)));
-            }
-            */
         }
         return pos;
     }

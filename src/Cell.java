@@ -38,7 +38,7 @@ public class Cell {
         return !(((y + dy < 1 || y + dy >= field.length - 1) || (x + dx < 1 || x + dx >= field[0].length - 1)) || field[(int) Math.round(y + dy)][(int) Math.round(x + dx)].type.equals("w"));
     }
 
-    public void mutateValueAVG(Vector b) {
+    public void mutateValueAVG (Vector b) {
         value = value.dot(timesMutated);
         value = value.plus(b);
         value = value.dot(1.0 / (timesMutated + 1));
@@ -47,27 +47,5 @@ public class Cell {
 
     public Cell shiftBy(Cell[][] field, Vector b) {
         return field[y + (int) Math.round(b.y)][x + (int) Math.round(b.x)];
-    }
-
-    public static void main(String[] args) {
-        Cell[][] field = {
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell("l"), new Cell("l"), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell("l"), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell("s"), new Cell("s"), new Cell("s"), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell("s"), new Cell("s"), new Cell("s"), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell("l"), new Cell("l"), new Cell("s"), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
-                {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
-        };
-
-
-
     }
 }
