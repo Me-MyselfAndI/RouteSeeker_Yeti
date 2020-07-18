@@ -95,6 +95,12 @@ public class Main {
      * point to fall onto this segment decreases.
      *
      * After a large number of trials, each starting cell gets evaluated fairly, meaning its value represents how likely a robot is to win starting from that cell.
+     *
+     *
+     * NOTE IN CASE NOT ALL OF THE INITIATION CELLS ON THE FIELD ARE ALLIGNED HORIZONTALLY:
+     * You will have to turn initLineValues into an ArrayList <Cell> instead of being an array. This is an easy fix. All the arrays that are related to
+     * StartLines will also have to be turned into such ArrayLists.
+     *
      */
     public static Cell pickStartingPosition (int startRowNumber, double[] initLineValues, double totalInitLineValue) {  // This returns a cell where the robot should start.
         Random rand = new Random();
