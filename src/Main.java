@@ -3,12 +3,12 @@ import java.util.Random;
 
 public class Main {
 
-    final static int amountOfTrials = 200000;
+    final static int amountOfTrials = 800000;
     final static double cargoConstant = 0.8;   // Strategic value of having one more cargo
     final static double matchTime = 15;        // Match time in seconds
     final static double timePrecision = 15;    // This is how many tacts there are in one match
     final static double wallConstant = 0.1;      // The greater is this constant, the more points robot loses for bumping into a wall
-    public static double stochasticConstant = 0.8;   // This determines how much influence probability vector has
+    public static double stochasticConstant = 1.2;   // This determines how much influence probability vector has
     public static double resultingScore;
 
 
@@ -78,6 +78,7 @@ public class Main {
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
     };
 
+
     /**
      * This whole thing is a mini-AI for picking the best starting point, based on Q-Learning.
      * In order to explain how it works, let's first see the initial state of the system.
@@ -97,9 +98,12 @@ public class Main {
      * After a large number of trials, each starting cell gets evaluated fairly, meaning its value represents how likely a robot is to win starting from that cell.
      *
      *
-     * NOTE IN CASE NOT ALL OF THE INITIATION CELLS ON THE FIELD ARE ALLIGNED HORIZONTALLY:
+     * NOTE IN CASE when NOT ALL of the INITIATION CELLS ON THE FIELD ARE ALLIGNED HORIZONTALLY:
      * You will have to turn initLineValues into an ArrayList <Cell> instead of being an array. This is an easy fix. All the arrays that are related to
      * StartLines will also have to be turned into such ArrayLists.
+     * DO NOT turn initCell arrays into 2D arrays. You will get a slower program. I don't want this, U don't want this, no one wants this. Don't make yourself and the drive team unhappy
+     * If that is a 2D array of cells, then instead of being O(n) this method will become O(n^2). This will happen due to running around the whole field where no more than 5% of the
+     * cells can be initialline cells. This is rudely inefficient. Don't. Just use ArrayList
      *
      */
     public static Cell pickStartingPosition (int startRowNumber, double[] initLineValues, double totalInitLineValue) {  // This returns a cell where the robot should start.
@@ -124,17 +128,27 @@ public class Main {
 
         System.out.println(initCellXCoord);
         if (initCellXCoord < 4 || initCellXCoord > initLineValues.length - 4) { // You can trace a dangerous situation here
-                                            // If the compiler got into this branch, it means it picked a wall as a starting point. That's bad - robot cannot start there.
-                                            // Yet, nothing critical. That can never become a part of the output of the program. The reason is, such sequence is doomed
-                                            // to get immediately cut down at the first attempt to move the robot: the program will assume the bot bumped into a wall.
+            // If the compiler got into this branch, it means it picked a wall as a starting point. That's bad - robot cannot start there.
+            // Yet, nothing critical. That can never become a part of the output of the program. The reason is, such sequence is doomed
+            // to get immediately cut down at the first attempt to move the robot: the program will assume the bot bumped into a wall.
             System.out.println("Look closer");  // So, it is enough to just print something. If you get this message too often, something's messed up. It means that somehow
-                                            // wall values got high enough to cause obot to start from the walls. These values can not ever get rewarded bc the sequence has
-                                            // to have length of 1 that immediately terminates at this wall
+            // wall values got high enough to cause obot to start from the walls. These values can not ever get rewarded bc the sequence has
+            // to have length of 1 that immediately terminates at this wall
         }
         return field[startRowNumber][initCellXCoord];   //Returns the cell on the field
     }
 
 
+    /**
+     *
+     * Now that you know how the startCell-picking AI works, you shouldn't have troubles understanding this large AI. It is based on the same approach.
+     * The main difference - apart from the field being 2-dimensional - is that instead of just havig some scalar values for each cell, we want each value to be a vector.
+     * This vector will point in the direction of the path from there that proved itself to be on average most successful.
+     * So, when you got a good score, the avg vector of the particular cell's scores will get added a large addend that is directed where the robot went from the cell.
+     * In case the trial yielded a bad score, a smaller addend will be added, and the average will point less in that direction.
+     *
+     * Everything the rest is the same as in the method that picks a starting cell.
+     */
     public static void main(String[] args) {
         // This is an array for counting all nonzero cells.
         boolean [][] valueIsZero = new boolean[field.length][field[0].length];
@@ -156,12 +170,8 @@ public class Main {
         ArrayList<RobotSequenceRecord> bestSequence = new ArrayList<>();   // This stores the sequence that achieved best possible score
         String outputOfBestSequence = "";       // This stores the output of the best sequence
         long totalScore = 0;            // This scores the total of all scores up to the current trial
-        // This stores total (NOT net) value of all cells.
-        double totalValue = 0;
-        int numberOfBestScores = 1;
-        int nonzeroTrialsAmount = 0;
-        double avgScoreForNonzeroTrials = 0;
-
+        double totalValue = 0;          // This stores total (NOT net) value of all cells.
+        int numberOfBestScores = 1;     // This stores how many times the best score was achieved
 
 
 
@@ -173,33 +183,30 @@ public class Main {
         for (int i = 1; i < initLineValues.length - 1; ++i) {
             initLineValues[i] = 1;
         }
-        // First and last cells are walls => the robot should not consider starting from there, so make their values zeros.
-        initLineValues[0] = 0;
-        initLineValues[initLineValues.length - 1] = 0;
+        // First and last 3 cells are walls => the robot should not consider starting from there, so make their values zeros.
+        for (int i = 0; i < 3; ++i) {
+            initLineValues[i] = 0;
+            initLineValues[initLineValues.length - i - 1] = 0;
+        }
 
-        // This array stores how many times did the robot start at every initial cell
+        // Total of all init. line values
         double totalInitLineValue = initLineValues.length - 2;
-
-
 
 
 
         for (int trial = 1; trial <= amountOfTrials; ++trial) {
 
-            if (trial % 100000 == 1) {
-                // This whole thing inside the brackets is needed to make program faster.
-                // When total score reaches some particular mark, every cell's value gets divided by a constant.
-                // This lets the program avoid getting enormously slow close to 500,000th trial
-
-                for (int i = 1; i < initLineValues.length - 1; ++i) initLineValues[i] = 1;
-                initLineValues[0] = 0;
-                initLineValues[initLineValues.length - 1] = 0;
-
-                for (int i = 1; i < initLineValues.length - 1; ++i) {
+            if (trial % 200000 == 1) {
+                    // In order to prevent the initLineValues from slipping completely into an uneven system that prevents new strategies from appearing, we need to
+                    // once in a while null them all
+                    for (int i = 1; i < initLineValues.length - 1; ++i)
                     initLineValues[i] = 1;
-                }
-                totalInitLineValue = initLineValues.length - 2;
 
+                totalInitLineValue = initLineValues.length - 6;
+                for (int i = 0; i < 3; ++i) {
+                    initLineValues[i] = 0;
+                    initLineValues[initLineValues.length - i - 1] = 0;
+                }
             }
 
             // The following block is to calculate the total amount of nonzero-valued cells.
@@ -211,7 +218,6 @@ public class Main {
                 }
             }
 
-
             // Creating the robot. The long expression of rand.nextInt(...) picks random cell except for the first and last one.
             Robot robot = new Robot (pickStartingPosition(initLine, initLineValues, totalInitLineValue), 20, 1, 3);
             double increment = matchTime/timePrecision; // This is an increment of time each "turn"
@@ -221,61 +227,77 @@ public class Main {
             robot.move(field, increment, stochasticConstant, totalValue/(totalNonzeroValues + 1), timePrecision);
 
 
-            double score = cargoConstant*3 + 5;          // Here you should calculate what is a strategical value of having one more cargo already loaded at the end of the autonomous.
+            double score = cargoConstant*3 + 5;          // This is a running score
             String output = "";
 
             //Здесь должно быть начисление очков
-            double[] scoreMarks = new double[robot.sequence.size()];
-            double maxScore = score;
-            robot.sequence.add(new RobotSequenceRecord(new Cell(0, 0), new Vector(0, 0), robot.cargo));
-            for (int i = robot.sequence.size() - 2; i >= 0; i--) {
+            double[] scoreMarks = new double[robot.sequence.size()];    // This array stores how much of a score did each cell produce for the total
+                                                                // The idea is, if the cell was visited before or at the moment when some part of the score was gained,
+                                                    // then it means it commited to that score. Cells that were visited later than the score increased don't get reward for the points
+            double maxScore = score;        // Max Score is for that exact purpose. This stores the maximum score that has been reached up to the moment. See below inside the loop
+            robot.sequence.add(new RobotSequenceRecord(new Cell(0, 0), new Vector(0, 0), robot.cargo)); // This is used for avoiding the error of getting outside of array boundaries
 
-                Cell currCell = robot.sequence.get(i).cell;
-                int cargo = robot.sequence.get(i).cargo;
-                int prevCargo = robot.sequence.get(i+1).cargo;
+            for (int i = robot.sequence.size() - 2; i >= 0; i--) {  // We go DOWN from the top. This way we keep track of the scores and avoid assigning scores to
+                                                                    // the cells that have nothing to deal with how the score was gained
+
+                Cell currCell = robot.sequence.get(i).cell;     // Stores current cell
+                int cargo = robot.sequence.get(i).cargo;        // Stores cargo that the robot had when was at currCell
+
+                int prevCargo = robot.sequence.get(i+1).cargo;  // Stores cargo that the robot had at the next cell after currCell. It is prevCargo bc we
+                                                                // are going backwards, and it's previous on our way from last member of the sequence to the first
 
                 output = ("(" + currCell.x + "; " + currCell.y + ") -->\n").concat(output);
 
                 // If the robot is on the loading kind of cell, and there is enough space to load, it should do that. Cargo increases by 1.
-                if (cargo < prevCargo) {
+                if (cargo < prevCargo) {    // If the cargo decreased in comparison to the prevCell, it means it loaded (think backwards)
                     output = "l ".concat(output);
-                    score += cargoConstant;
+                    score += cargoConstant;         // Increase score by the strategic value of having a cargo
                 }
-                else while (currCell.type.equals("s") && cargo > 0) {    // Similarly, if there is a place to shoot, the score grows, and load decreases
+                else while (currCell.type.equals("s") && cargo > 0) {    // If it had cargo to shoot with and was at a shooting place, it sjot
+                                           // It would always keep shooting until shot everything, so it is a while, not if.
                     output = "s ".concat(output);
-                    score += 3 - cargoConstant;
+                    score += 3 - cargoConstant; // Score increased by 3 but decreased by the strategic value of having one more cargo.
+                                                // This is what we need maxScore for: if we look at the next cell in the sequence, it will now yield cargoConst less points
+                                                // despite that cargo was later filled up again to some extent (that appears in the formula when score is initialized).
+                                                // So, the next cell shouldn't get awarded less points if the cargo was later reloaded, and each cell gets awarded not score
+                                                // at the particular moment, but the greatest score out of those that were achieved after that cell was visited
                     cargo --;
                 }
-                if (score > maxScore)
-                    maxScore = score;
-                scoreMarks[i] = maxScore;  // Record the running score into scoreMarks of the current cell
+                maxScore = Math.max(score, maxScore);
+                scoreMarks[i] = maxScore;           // Record the maximum score into scoreMarks of the current cell
             }
 
+
+
             System.out.println(output);
-            totalScore += score;    // Increasing the total score of all trials by this score
-            robot.sequence.remove(robot.sequence.size() - 1);
+            totalScore += maxScore;    // Increasing the total score of all trials by this score
+            robot.sequence.remove(robot.sequence.size() - 1);   // Now we remove the extra node that we added above
 
 
+            // In case that the maxScore beats the best score out of all trials, we need to assign the new best score.
+            // Another parameter of a good run is a shorter distance. The distance is plargely related to the number of nodes.
+            // So, if the bestSequence yields the same score, but it's longer, we still reassign it
             if (maxScore > bestScore || (maxScore == bestScore && robot.sequence.size() < bestSequence.size())) {    // This is for recording the best possible sequence
+
                 if (bestScore != maxScore) {
                     numberOfBestScores = 0;
                 }
+
                 bestScore = maxScore;
                 bestSequence = robot.sequence;
                 outputOfBestSequence = output;
             }
+
             if (maxScore == bestScore)
                 numberOfBestScores++;
 
             // Ниже должно быть начисление весов (Привет, Даня. Тут нечего переводить, всё ценное написано по-английски)
 
 
+            // Here we reassign values for the sequence.
+            for (int i = 0/*2*/; i < robot.sequence.size(); ++i) {
 
-            // Here we will reassign values.
-            for (int i = robot.sequence.size() - 1; i > 1; --i) {       // DO NOT mutate values of the starting cell here.
-                // It is useless and leads to overwhelmingly high
-                // numbers on the initiation line
-                RobotSequenceRecord currNode = robot.sequence.get(i);
+                RobotSequenceRecord currNode = robot.sequence.get(i);   // This is the currently reviewed robotSequenceRecord
 
                 totalValue -= currNode.cell.value.getValue();    // Every time we assign scores, the value changes. So, we subtract it here and add back the new after the value of the cell is changed
                 currNode.cell.mutateValueAVG (Vector.CreateFromCortesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i])*(maxScore == bestScore ? 2 : 1)));
@@ -285,10 +307,9 @@ public class Main {
                 // doesn't affect anything, unless happens too often, it is ok to just mark any cell that ever got changed as nonzero
                 // for the sake of reducing O(n^2) of checking each cell for its value to O(n) of the following operation
                 valueIsZero[currNode.cell.y][currNode.cell.x] = false;
-
             }
 
-            if (robot.sequence.size() > 0) {
+            if (robot.sequence.size() > 0) {    // This is a punishment for hitting the wall
                 RobotSequenceRecord lastNode = robot.sequence.get(robot.sequence.size() - 1);
 
                 totalValue -= lastNode.cell.value.getValue();
@@ -297,13 +318,18 @@ public class Main {
                 totalValue += lastNode.cell.value.getValue();
             }
 
-            if (score != robot.cargo*cargoConstant)
-                avgScoreForNonzeroTrials = (avgScoreForNonzeroTrials*(nonzeroTrialsAmount++) + score)/nonzeroTrialsAmount;
 
-            double tempDiff = initLineValues[robot.sequence.get(0).cell.x] * (score > avgScoreForNonzeroTrials ? (initLineValues[robot.sequence.get(0).cell.x] > totalInitLineValue/15 ? 0 : 1.0) : (initLineValues[robot.sequence.get(0).cell.x] > 0.2 ? -0.0004 : 0));
+
+            // This block is responsible for changing values of the initiation line
+            // We reward the ctarting cell if it gave a better-than-average score. Else we punish it.
+            double tempDiff = initLineValues[robot.sequence.get(0).cell.x] * (score > totalScore/trial ? (initLineValues[robot.sequence.get(0).cell.x] > totalInitLineValue/20 ? 0 : 0.07) : (initLineValues[robot.sequence.get(0).cell.x] > 0.2 ? -0.004 : 0));
             initLineValues[robot.sequence.get(0).cell.x] += tempDiff;
             totalInitLineValue += tempDiff;
 
+
+
+            // Use the following block for debugging if you need to see field values.
+            /*
             if (trial % 1000 <= 3) {
                 for (int i = 0; i < field.length; ++i) {
                     for (int j = 0; j < field[0].length; ++j) {
@@ -312,11 +338,10 @@ public class Main {
                     System.out.println();
                 }
             }
-
+            */
 
             System.out.println("Score: " + score);
             System.out.println("Average score per trial: " + ((double)Math.round(1000.0*totalScore/trial))/1000);
-            System.out.println("Average score per nonzero trial: " + ((double)Math.round(10000.0*avgScoreForNonzeroTrials))/10000);
             System.out.println("Best score: " + bestScore);
             System.out.println("Number of best scores: " + numberOfBestScores);
         }
