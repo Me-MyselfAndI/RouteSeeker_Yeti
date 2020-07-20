@@ -3,30 +3,46 @@
 public class Vector {
     double x, y;
 
+    public Vector () {}
+
+    /**
+     * With this program, polar coordinates are uncomparably more convenient as a way to make a vector than Cartesian.
+     * But there is another 'constructor' from Cartesians below in case t s needed to create a Vector using Cartesian
+     * @param radius - length of the vector
+     * @param angle - angle of the vector. Imagine a unit circle. Angle is measured the same way
+     */
     public Vector (double radius, double angle) {
-        this.x = radius*Math.cos(angle);
-        this.y = radius*Math.sin(angle);
+        x = radius*Math.cos(angle);
+        y = radius*Math.sin(angle);
+    }
+
+    public static Vector CreateFromCartesian (double x, double y) {
+        Vector res = new Vector();
+        res.x = x;
+        res.y = y;
+        return res;
     }
 
     public Vector(Vector b) {
-        this.x = b.x;
-        this.y = b.y;
+        x = b.x;
+        y = b.y;
     }
 
     public double getAngle (){
         return x == 0 && y == 0 ? 0 : Math.acos(x/Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)))*Math.signum(y);
-
+                            // theta = acos (X/R), where R is hypotenuse
+                            // sign(y) determines the direction of the angle (THINK OF UNIT CIRCLE)
     }
 
     public double getValue () {
-        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));  // Just Pythagorean Theorem
     }
 
-    public double dot (Vector b) {
+    public double dot (Vector b) {  // Scalar product (or dot-product) of vectors
         return Math.cos(angleBetween(b))*getValue()*b.getValue();
     }
 
-    public Vector dot (double b) {
+    public Vector dot (double b) {  // Vector times (dot) scalar
         Vector res = new Vector(this);
         res.x *= b;
         res.y *= b;
@@ -37,21 +53,14 @@ public class Vector {
         return b.getAngle() - getAngle();
     }
 
-    public Vector plus (Vector b) {
+    public Vector plus (Vector b) {      // Vector sum
         Vector res = new Vector(this);
         res.x += b.x;
         res.y += b.y;
         return res;
     }
 
-    public static Vector CreateFromCortesian (double x, double y) {
-        if (x == 0 && y == 0)
-            return new Vector(0,0);
-        double angle = Math.acos(x/Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)))*Math.signum(y);
-        return new Vector(x/Math.cos(angle), angle);
-    }
-
-    public String toString() {
+    public String toString() {      // Just prints vector's Cartesian components
         return "(" + Math.round(x) + ";" + Math.round(y) + ")";
     }
 
@@ -60,51 +69,45 @@ public class Vector {
         y = value.y;
     }
 
-    public void add (Vector a) {
+    public void add (Vector a) {    // Adds some other vector to this vector
         this.setValue(this.plus(a));
     }
 
 
     public boolean containsPoint (double xCoord, double yCoord) {
-        Vector vector = Vector.CreateFromCortesian(xCoord, yCoord);
+        Vector vector = Vector.CreateFromCartesian(xCoord, yCoord);
         return this.getAngle() == vector.getAngle() && vector.getValue() <= this.getValue();
     }
-    public boolean wayIsClear (Cell[][] field, Cell pos, double robotWidth) {
-        return Vector.wayIsClear(field, pos, this, robotWidth);
-    }
 
+
+    /**
+     *
+     * @param field - game field
+     * @param pos - position of this vector's starting point
+     * @param dPos - the vector of displacement
+     * @param robotWidth - the width of robot cell
+     * @return whether or not there are obstacles on the offered way
+     */
     public static boolean wayIsClear (Cell[][] field, Cell pos, Vector dPos, double robotWidth) {
-        if (!pos.check(field, dPos.x, dPos.y)) return false;
+        if (!pos.check(field, dPos.x, dPos.y)) return false;     // If there is a wall on the endpoint, or it is outside of the game field, quit immediately
 
-        if (Math.abs(dPos.x) < 3 && pos.x > 42 && pos.x < 58)
-             System.out.println("Look here");
-
-        double dPosValue = dPos.getValue();
-        Vector increment = new Vector(0.5, dPos.getAngle());
-        for (Vector i = new Vector (0,0); i.getValue() <= dPosValue; i.add(increment)) {
-            Cell currCell = pos.shiftBy(field, i);
-            for (double xDist = -robotWidth; xDist <= robotWidth; xDist += .5)
+        double dPosValue = dPos.getValue();       // In order to not waste time to run the same function many times, we'll
+                                                  // just record it once (dynamic programming) and reuse it every time
+        Vector increment = new Vector(0.5, dPosValue);  // This will be used as an increment in the for-loop
+        for (Vector i = new Vector (0,0); i.getValue() <= dPosValue; i.add(increment)) { // For-loop with a vector as a counter
+            Cell currCell = pos.shiftBy(field, i);            // This is the cell that will be reviewed
+            for (double xDist = -robotWidth; xDist <= robotWidth; xDist += .5)  // This and the following loops eliminate the cells around the robot cell
                 for (double yDist = -robotWidth; yDist <= robotWidth; yDist += .5)
-                    if (!currCell.check(field, xDist, yDist))
+                    if (!currCell.check(field, xDist, yDist))       // If there is a wall here, return false
                         return false;
         }
-
+        // If reached this place, it means the way is clear
         return true;
     }
 
-
-
-
-
-    public static void main(String[] args) {
-        Vector a = Vector.CreateFromCortesian(2, 5);
-
-        Vector b = Vector.CreateFromCortesian(-2, 5), c = Vector.CreateFromCortesian(2, -5), d = Vector.CreateFromCortesian(-2, -5);
-        System.out.println(d.getAngle());
-
-        Vector increment = new Vector(0.2, c.getAngle());
-        for (Vector i = new Vector(0, 0); i.getValue() <= a.getValue(); i.add(increment)) {
-            System.out.println(i);
-        }
+    // This is the same method as above, just not static
+    public boolean wayIsClear (Cell[][] field, Cell pos, double robotWidth) {
+        return wayIsClear(field, pos, this, robotWidth);
     }
+
 }

@@ -3,12 +3,12 @@ import java.util.Random;
 
 public class Main {
 
-    final static int amountOfTrials = 800000;
+    final static int amountOfTrials = 500000;
     final static double cargoConstant = 0.8;   // Strategic value of having one more cargo
     final static double matchTime = 15;        // Match time in seconds
     final static double timePrecision = 15;    // This is how many tacts there are in one match
     final static double wallConstant = 0.1;      // The greater is this constant, the more points robot loses for bumping into a wall
-    public static double stochasticConstant = 1.2;   // This determines how much influence probability vector has
+    public static double stochasticConstant = 0.8;   // This determines how much influence probability vector has
     public static double resultingScore;
 
 
@@ -300,7 +300,7 @@ public class Main {
                 RobotSequenceRecord currNode = robot.sequence.get(i);   // This is the currently reviewed robotSequenceRecord
 
                 totalValue -= currNode.cell.value.getValue();    // Every time we assign scores, the value changes. So, we subtract it here and add back the new after the value of the cell is changed
-                currNode.cell.mutateValueAVG (Vector.CreateFromCortesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i])*(maxScore == bestScore ? 2 : 1)));
+                currNode.cell.mutateValueAVG (Vector.CreateFromCartesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i])*(maxScore == bestScore ? 2 : 1)));
                 totalValue += currNode.cell.value.getValue();
 
                 // Because the chance that some cell became zero after some number of changes is disappearingly small and
@@ -313,7 +313,7 @@ public class Main {
                 RobotSequenceRecord lastNode = robot.sequence.get(robot.sequence.size() - 1);
 
                 totalValue -= lastNode.cell.value.getValue();
-                lastNode.cell.mutateValueAVG (Vector.CreateFromCortesian(-lastNode.acc.x, -lastNode.acc.y).dot((timePrecision-robot.sequence.size())*wallConstant));
+                lastNode.cell.mutateValueAVG (Vector.CreateFromCartesian(-lastNode.acc.x, -lastNode.acc.y).dot((timePrecision-robot.sequence.size())*wallConstant));
                 System.out.println();
                 totalValue += lastNode.cell.value.getValue();
             }
