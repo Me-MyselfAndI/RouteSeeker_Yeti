@@ -18,7 +18,9 @@ As of 21st of July, 2020, the current version:
 
 
 The description of components of the project:
+
  Menu.py - a graphic interface to enter robot paths.
+
  /src:
    Cell.java - the field is broken into square sections called cells. Each cell is an instance of Cell class.
    
