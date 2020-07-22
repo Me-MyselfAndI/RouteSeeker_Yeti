@@ -47,7 +47,9 @@ is given back as an output.
 
       
 This project belongs to the FRC Team 3506 Yeti Robotics.
+
 Designed by Grigorii Podoksik
+
 Idea of Caedmon McGinn
 
 
