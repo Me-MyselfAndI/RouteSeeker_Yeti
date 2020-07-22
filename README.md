@@ -8,7 +8,7 @@ The code is adjustable for each new year's game.
 -------
 
 To run the project, use src/Main.main()
--
+--
 -------
 
 As of 21st of July, 2020, the current version:
