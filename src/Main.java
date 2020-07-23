@@ -4,12 +4,13 @@ import java.util.Random;
 public class Main {
 
     final static int amountOfTrials = 500000;
-    final static double cargoConstant = 0.8;   // Strategic value of having one more cargo
+    final static double cargoConstant = 1.2;   // Strategic value of having one more cargo
     final static double matchTime = 15;        // Match time in seconds
     final static double timePrecision = 15;    // This is how many tacts there are in one match
-    final static double wallConstant = 0.1;      // The greater is this constant, the more points robot loses for bumping into a wall
-    public static double stochasticConstant = 0.8;   // This determines how much influence probability vector has
-    public static double resultingScore;
+    final static double wallConstant = 0;    // The greater is this constant, the more points robot loses for bumping into a wall
+
+    public static double probabilisticConstant = 0.7;   // This determines how much influence probability vector has.
+                                                        // See Robot.probabilisticAcceleration for more
 
 
     static Cell[][] field = {        // w = Wall/obstacle;    l = Loading station;    s = suitable to Shoot;     i = Initiation line
@@ -219,12 +220,12 @@ public class Main {
             }
 
             // Creating the robot. The long expression of rand.nextInt(...) picks random cell except for the first and last one.
-            Robot robot = new Robot (pickStartingPosition(initLine, initLineValues, totalInitLineValue), 20, 1, 3);
+            Robot robot = new Robot (field, pickStartingPosition(initLine, initLineValues, totalInitLineValue), 20, 1, 3);
             double increment = matchTime/timePrecision; // This is an increment of time each "turn"
-            System.out.println("\n\n\t\tTrial: L- " + (amountOfTrials - trial));
+            System.out.println("\n\n\t\tTrial: L-" + (amountOfTrials - trial));
 
 
-            robot.move(field, increment, stochasticConstant, totalValue/(totalNonzeroValues + 1), timePrecision);
+            robot.move(increment, probabilisticConstant, totalValue/(totalNonzeroValues + 1), timePrecision);
 
 
             double score = cargoConstant*3 + 5;          // This is a running score
@@ -291,9 +292,6 @@ public class Main {
             if (maxScore == bestScore)
                 numberOfBestScores++;
 
-            // Ниже должно быть начисление весов (Привет, Даня. Тут нечего переводить, всё ценное написано по-английски)
-
-
             // Here we reassign values for the sequence.
             for (int i = 0/*2*/; i < robot.sequence.size(); ++i) {
 
@@ -346,7 +344,6 @@ public class Main {
             System.out.println("Number of best scores: " + numberOfBestScores);
         }
         System.out.println("The best sequence yields " + bestScore + " points:\n" + outputOfBestSequence);
-        resultingScore = bestScore;
 
         for (int i = 0; i < bestSequence.size(); ++i) {
             bestSequence.get(i).cell.type = "\u001B[31m" + (i+1) + "\u001B[0m";

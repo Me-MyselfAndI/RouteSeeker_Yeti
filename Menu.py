@@ -104,17 +104,17 @@ class Ui_Dialog(object):
                             kinda_current = kinda_current.foll
                     #--------------------------------------------------------------------------
 
-        teamInfo = "(" + teamNumber + ", " + speed + ", " + shootingTime + "), "
+        teamInfo = "(" + teamNumber + ", " + speed + ", " + shootingTime + "), \n"
 
         path = [teamInfo]                            
         current = first
-        file = open('teamTrajectories.txt', 'a')
+        file = open('Allies_strategies/' + teamNumber + '.txt', 'a')
         file.write("\n" + teamInfo)
         while (current.isLast == False):
             print ("Appending: " + str(current.pos))
-            appendix = str(current.pos) + (current.action if current.action != "" else "")
+            appendix = str(current.pos) + (current.action if current.action != "" else "") + ", \n"
             path.append (appendix)
-            file.write (appendix + ", ")
+            file.write (appendix + "")
             current = current.foll
         
         file.write("e")
@@ -126,7 +126,9 @@ class Ui_Dialog(object):
     
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(1200, 1070)
+        windowLength = 1200;
+        windowHeight = 700;
+        Dialog.resize(windowLength, windowHeight)
         
         self.teamBoxWidget = QtWidgets.QWidget(Dialog)
         self.teamBoxWidget.setGeometry(QtCore.QRect(self.gridPosition[0] + self.gridWidth + 20, 400, 130, 120))
@@ -159,11 +161,11 @@ class Ui_Dialog(object):
         self.sendButton.clicked.connect(self.sendClicked)
         
         self.settButton = QtWidgets.QPushButton(Dialog)
-        self.settButton.setGeometry(QtCore.QRect(1000, 525, 190, 510))
+        self.settButton.setGeometry(QtCore.QRect(windowLength - 200, 10, 190, (windowHeight - 20)/2))
         self.settButton.setObjectName("settButton")
      
         self.viewButton = QtWidgets.QPushButton(Dialog)
-        self.viewButton.setGeometry(QtCore.QRect(1000, 10, 190, 510))
+        self.viewButton.setGeometry(QtCore.QRect(windowLength - 200, (windowHeight - 20)/2 + 20, 190, (windowHeight - 20)/2))
         self.viewButton.setObjectName("viewButton")
         
         self.Field = QtWidgets.QLabel(Dialog)

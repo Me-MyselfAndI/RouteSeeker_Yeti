@@ -5,7 +5,8 @@ import static java.lang.Math.pow;
 
 
 public class Robot {
-    final private double robotDimension = 1.5;  // Here place an upper-estimate on possible length/width of a robot.
+    Cell[][] field;
+    final private double robotDimension = 1;  // Here place an upper-estimate on possible length/width of a robot.
     final int maxCargo = 5;                   // Maximum cargo that the robot can hold
     Cell pos;                                 // Current position
     int cargo;                                // Current amount of cargo
@@ -15,7 +16,7 @@ public class Robot {
     Vector vel;                               // Velocity @ any current moment
     boolean running;                          // Whether or not the sequence of moves is over (i.e. robot is still running)
 
-    public Robot (Cell pos, double maxAcc, double shootingTime, int cargo) {    // Initiation of a robot
+    public Robot (Cell[][] field, Cell pos, double maxAcc, double shootingTime, int cargo) {    // Initiation of a robot
         running = true;                   // Robot is running when created
         this.pos = pos;                   // Assigning starting position
         this.maxAcc = maxAcc;
@@ -24,23 +25,24 @@ public class Robot {
         usedCargo = new ArrayList<Cell>();
         this.cargo = cargo;
         vel = new Vector(0, 0);
+        this.field = field;
     }
 
     /**
-     * This method creates an acceleration that is partially random (== stochastic) and partially dependent on the cell value
+     * This method creates an acceleration that is partially random (== probabilistic) and partially dependent on the cell value
      * It works the following way:
      * 1. Create acceleration vector that is directly proportional and collinear to the value of the cell
-     * 2. Add a stochastic vector (its length is, of course, random. It stretches up to the product of maximum possible acceleration of the robot and so called stochastic constant)
+     * 2. Add a probabilistic vector (its length is, of course, random. It stretches up to the product of maximum possible acceleration of the robot and so called probabilistic constant)
      * 3. If the sum is too large (more than maxAxx), keep the direction of the vector but scale it down to maxAcc
      *
      * Returns the resulting vector
      */
-    private static Vector stochasticAcceleration (Robot robot, double stochasticConstant, double avgFieldValue) {
+    private static Vector probabilisticAcceleration (Robot robot, double probabilisticConstant, double avgFieldValue) {
         Random rand = new Random();
         // Создаем ускорение, равное value-вектору, scaled в случайное (в дальнейшем - мб неслучайное) значение не более maxAcc/avgFieldValue раз
         Vector acc = avgFieldValue == 0 ? new Vector(0, 0) : robot.pos.value.dot(rand.nextDouble()*robot.maxAcc/avgFieldValue);
-        // Добавляем к нему стохастический вектор, по модулю не больший, чем maxAcc*stochasticConstant
-        acc.add(new Vector(robot.maxAcc*stochasticConstant*rand.nextDouble(), (rand.nextDouble()*2 - 1)*Math.PI));
+        // Добавляем к нему стохастический вектор, по модулю не больший, чем maxAcc*probabilisticConstant
+        acc.add(new Vector(robot.maxAcc*probabilisticConstant*rand.nextDouble(), (rand.nextDouble()*2 - 1)*Math.PI));
         // Если вышло по модулю более, чем maxAcc, то уменьшаем до maxAcc
         if (acc.getValue() > robot.maxAcc)
             acc = new Vector(robot.maxAcc, acc.getAngle());
@@ -51,14 +53,13 @@ public class Robot {
     /**
      * This function determines where and how long the robot moves.
      *
-     * @param field Cell 2D array of the playing field
      * @param dT    This is how much time per tact there is in seconds. Recommended to take no more than 1.
-     * @param stochasticConstant    How much influence there is for probability in creating acceleration (later passed to stochastic acceleration)
-     * @param avgFieldValue         Average modulus of field value (so, based on total, NOT net). Also used to determine stochastic acceleration
+     * @param probabilisticConstant    How much influence there is for probability in creating acceleration (later passed to probabilistic acceleration)
+     * @param avgFieldValue         Average modulus of field value (so, based on total, NOT net). Also used to determine probabilistic acceleration
      * @param remainingTime         How many tacts of time are left
      * @return                      The cell where the robot arrived
      */
-    public Cell move (Cell[][] field, double dT, double stochasticConstant, double avgFieldValue, double remainingTime){
+    public Cell move (double dT, double probabilisticConstant, double avgFieldValue, double remainingTime){
 
         boolean wayIsClear;         // This variable will soon be used to store whether or not there are any obstacles on the way
         Vector acc, deltaPos;       //
@@ -69,7 +70,7 @@ public class Robot {
         int counter = 0;
         do {
             counter ++;
-            acc = stochasticAcceleration(this, stochasticConstant, avgFieldValue); // Here we stochastically decide what the acceleration value will be
+            acc = probabilisticAcceleration(this, probabilisticConstant, avgFieldValue); // Here we probabilistically decide what the acceleration value will be
             deltaPos = new Vector(vel.dot(dT).plus(acc.dot(pow(dT, 2) / 2)));            // Using dP = v_0*t + at^2/2
             wayIsClear = deltaPos.wayIsClear(field, pos, robotDimension);                // If there are no obstacles on the way, way is clear.
         } while (counter <= 15 && !wayIsClear);                     // If the way offered has no obstacles, or tried 15 times and no luck, stop looking for another trajectory
@@ -106,7 +107,7 @@ public class Robot {
          */
         if (remainingTime > dT && wayIsClear) {
             pos = field[pos.y + (int) deltaPos.y][pos.x + (int) deltaPos.x];    // The new position is old + dP
-            return move(field, dT, stochasticConstant, avgFieldValue, remainingTime - dT);  // Recursive step.
+            return move(dT, probabilisticConstant, avgFieldValue, remainingTime - dT);  // Recursive step.
         }
         return pos;     // When finished with all recursions, return the position
     }
