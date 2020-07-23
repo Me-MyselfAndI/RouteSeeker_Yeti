@@ -33,11 +33,11 @@ The description of the components of the project:
    Robot.java - this class is made specifically to describe OUR robot. It includes all kinematic properties and values (such as velocity or current aceleration), the 
 sequence of moves, size of the robot cell, amount of cargo and robot's position. This class contains methods that determine where and how long the robot moves.
 
-   SequenceRecords.java - used as a parent class for RobotSequenceRecord and AlliesSequenceRecord (see below)
+   SequenceRecord.java - used as a parent class for RobotSequenceRecord and AlliesSequenceRecord (see below)
    
    RobotSequenceRecord.java - used for recording the sequence of positions, accelerations and amounts of cargo robot had during one trial.
    
-   AlliesSequenceRecords.java - similar class, but for allies. Instead of acceleration, stores velocity.
+   AllieSequenceRecords.java - similar class, but for allies. Instead of acceleration, stores velocity.
    
    AlliedRobot.java - interprets and records trajectory that was written into the graphic interface.
    
