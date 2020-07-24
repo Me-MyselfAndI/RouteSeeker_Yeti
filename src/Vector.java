@@ -29,7 +29,7 @@ public class Vector {
     }
 
     public double getAngle (){
-        return x == 0 && y == 0 ? 0 : Math.acos(x/Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)))*Math.signum(y);
+        return x == 0 && y == 0 ? 0 : Math.acos(x / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * Math.signum(y);
                             // theta = acos (X/R), where R is hypotenuse
                             // sign(y) determines the direction of the angle (THINK OF UNIT CIRCLE)
     }

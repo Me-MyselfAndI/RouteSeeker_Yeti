@@ -1,15 +1,17 @@
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Main {
 
-    final static int amountOfTrials = 500000;
+    final static int amountOfTrials = 300000;
     final static double cargoConstant = 1.2;   // Strategic value of having one more cargo
     final static double matchTime = 15;        // Match time in seconds
     final static double timePrecision = 15;    // This is how many tacts there are in one match
     final static double wallConstant = 0;    // The greater is this constant, the more points robot loses for bumping into a wall
 
-    public static double probabilisticConstant = 0.7;   // This determines how much influence probability vector has.
+    public static double probabilisticConstant = 1.3;   // This determines how much influence probability vector has.
                                                         // See Robot.probabilisticAcceleration for more
 
 
@@ -150,7 +152,7 @@ public class Main {
      *
      * Everything the rest is the same as in the method that picks a starting cell.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // This is an array for counting all nonzero cells.
         boolean [][] valueIsZero = new boolean[field.length][field[0].length];
 
@@ -264,7 +266,7 @@ public class Main {
                                                 // at the particular moment, but the greatest score out of those that were achieved after that cell was visited
                     cargo --;
                 }
-                maxScore = Math.max(score, maxScore);
+                maxScore = Math.max(((double)Math.round(score*10))/10, maxScore);
                 scoreMarks[i] = maxScore;           // Record the maximum score into scoreMarks of the current cell
             }
 
@@ -298,7 +300,7 @@ public class Main {
                 RobotSequenceRecord currNode = robot.sequence.get(i);   // This is the currently reviewed robotSequenceRecord
 
                 totalValue -= currNode.cell.value.getValue();    // Every time we assign scores, the value changes. So, we subtract it here and add back the new after the value of the cell is changed
-                currNode.cell.mutateValueAVG (Vector.CreateFromCartesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i])*(maxScore == bestScore ? 2 : 1)));
+                currNode.cell.mutateValueAVG (Vector.CreateFromCartesian(currNode.acc.x, currNode.acc.y).dot((scoreMarks[i])*(maxScore == bestScore ? 1 : 1)));
                 totalValue += currNode.cell.value.getValue();
 
                 // Because the chance that some cell became zero after some number of changes is disappearingly small and
@@ -355,5 +357,34 @@ public class Main {
             }
             System.out.println();
         }
+
+
+        File file = new File("RobotPath.csv");  // This will be the file for output
+        file.createNewFile();
+        FileWriter output = new FileWriter(file);
+
+        output.append("Move #\tAngle (radians)\tDistance(cells)\n");    // This is the hat of the table
+
+        Vector prevDisplacement = new Vector(1, Math.PI/2);     // This will store the vector of previous (last move)
+                                                                    // displacement at every point
+        for (int i = 0; i < bestSequence.size() - 1; ++i) {
+            Cell currCell = bestSequence.get(i).cell, nextCell = bestSequence.get(i+1).cell;    // Current cell
+            Vector currDisplacement = Vector.CreateFromCartesian(nextCell.x - currCell.x, nextCell.y - currCell.y); // Vector of current displacement
+            double angle = prevDisplacement.angleBetween(currDisplacement);     // Calculates the angle between the
+                                                            // previous and current displacement vectors. The direction is
+                                                // the same as in polar circle: CCW is positive, CW is negative
+            double distance = currDisplacement.getValue();  // Gets the distance between current and next cells
+
+            System.out.println("Move #" + (i+1) + ":\n\tAngle: " + Math.round(angle*180/Math.PI) + " degrees\n\tDistance: " + distance);
+            // Output for a programmer to see
+
+            output.append(i + "\t" + angle + "\t" + distance + "\n");
+            // Output for the computer into the CSV file. NOTE THAT THE ANGLE HERE IS IN RADIANS
+
+            prevDisplacement = currDisplacement;    // Assigns current displacement into previous displacement
+                                                    // bc the next iteration it will be previous already
+        }
+        output.close();
+
     }
 }
