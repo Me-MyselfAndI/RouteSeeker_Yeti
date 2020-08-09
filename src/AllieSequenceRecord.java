@@ -1,10 +1,10 @@
 public class AllieSequenceRecord extends SequenceRecord {
 
-    Vector vel;
+    double time;
 
-    public AllieSequenceRecord (Cell cell, Vector vel, int cargo) {
+    public AllieSequenceRecord (Cell cell, int cargo, double time) {
         super(cell, cargo);
-        this.vel = vel;
+        this.time = time;
     }
 
     public AllieSequenceRecord (Cell cell, int cargo) {

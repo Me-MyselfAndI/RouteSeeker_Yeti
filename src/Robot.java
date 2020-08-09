@@ -5,19 +5,18 @@ import static java.lang.Math.pow;
 
 
 public class Robot {
-    Cell[][] field;
-    final private double robotDimension = 1;  // Here place an upper-estimate on possible length/width of a robot.
+    private double matchLength;
+    private Cell[][] field;
+    final private double robotDimension = 1.5;  // Here place an upper-estimate on possible length/width of a robot.
     final int maxCargo = 5;                   // Maximum cargo that the robot can hold
     Cell pos;                                 // Current position
     int cargo;                                // Current amount of cargo
     double maxAcc, shootingTime;              // Maximum acceleration and time it takes to shoot
     ArrayList <RobotSequenceRecord> sequence; // Holds record of all moves the robot did in the order they were done
     private ArrayList <Cell> usedCargo;       // Cargo on the field that has already been used. Needed to avoid picking the same cargo twice
-    Vector vel;                               // Velocity @ any current moment
-    boolean running;                          // Whether or not the sequence of moves is over (i.e. robot is still running)
+    private Vector vel;                               // Velocity @ any current moment
 
-    public Robot (Cell[][] field, Cell pos, double maxAcc, double shootingTime, int cargo) {    // Initiation of a robot
-        running = true;                   // Robot is running when created
+    public Robot (Cell[][] field, Cell pos, double maxAcc, double shootingTime, int cargo, double matchLength) {    // Initiation of a robot
         this.pos = pos;                   // Assigning starting position
         this.maxAcc = maxAcc;
         this.shootingTime = shootingTime;
@@ -59,7 +58,10 @@ public class Robot {
      * @param remainingTime         How many tacts of time are left
      * @return                      The cell where the robot arrived
      */
-    public Cell move (double dT, double probabilisticConstant, double avgFieldValue, double remainingTime){
+    public Cell move (double dT, double probabilisticConstant, double avgFieldValue, double remainingTime, AlliedRobot [] allies){
+
+        field = allies[0].leaveMarkOnField(matchLength - remainingTime);
+        field = allies[1].leaveMarkOnField(matchLength - remainingTime);
 
         boolean wayIsClear;         // This variable will soon be used to store whether or not there are any obstacles on the way
         Vector acc, deltaPos;       //
@@ -101,14 +103,15 @@ public class Robot {
         }
         vel.add(acc.dot(dT));       // Using v(dT) = v_0 + a*dT
 
-
         /**
          * If there is still time and the sequence isn't over (i.e. robot hasn't bumped into something yet), we run the next move recursively
          */
         if (remainingTime > dT && wayIsClear) {
             pos = field[pos.y + (int) deltaPos.y][pos.x + (int) deltaPos.x];    // The new position is old + dP
-            return move(dT, probabilisticConstant, avgFieldValue, remainingTime - dT);  // Recursive step.
+            return move(dT, probabilisticConstant, avgFieldValue, remainingTime - dT, allies);  // Recursive step.
         }
+        allies[0].clearTraces();
+        allies[1].clearTraces();
         return pos;     // When finished with all recursions, return the position
     }
 }

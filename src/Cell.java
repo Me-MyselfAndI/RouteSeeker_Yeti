@@ -30,8 +30,20 @@ public class Cell {
         return "" + type;
     }
 
-    public boolean check(Cell[][] field, double dx, double dy) {    // Checks whether the cell is outside the field, and whether there is a wall there
-        return !(((y + dy < 1 || y + dy >= field.length - 1) || (x + dx < 1 || x + dx >= field[0].length - 1)) || field[(int) Math.round(y + dy)][(int) Math.round(x + dx)].type.equals("w"));
+    public boolean check (Cell[][] field, double dx, double dy) {
+        return checkBeingInsideField(field, dx, dy) && checkForObstacles(field, dx, dy) && checkForRobots(field, dx, dy);
+    }
+
+    public boolean checkBeingInsideField (Cell[][] field, double dx, double dy) {
+        return !((y + dy < 1 || y + dy >= field.length - 1) || (x + dx < 1 || x + dx >= field[0].length - 1));
+    }
+
+    public boolean checkForObstacles (Cell[][] field, double dx, double dy) {    // Checks whether the cell is outside the field, and whether there is a wall/robot there
+        return !field[(int) Math.round(y + dy)][(int) Math.round(x + dx)].type.equals("w");
+    }
+
+    public boolean checkForRobots (Cell[][] field, double dx, double dy) {
+        return (!field[(int) Math.round(y + dy)][(int) Math.round(x + dx)].type.contains("r"));
     }
 
     // This changes the value. The value s an average of vectors that were added to it so to change it back

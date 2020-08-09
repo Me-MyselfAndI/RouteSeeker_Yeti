@@ -79,6 +79,40 @@ public class Vector {
         return this.getAngle() == vector.getAngle() && vector.getValue() <= this.getValue();
     }
 
+    public short getQuadrant () {
+        var angle = getAngle();
+        while (angle < 0)
+            angle += 360;
+
+        if (angle < 180)
+            return (short) (angle < 90 ? 1 : 2);
+        else
+            return (short) (angle < 270? 3 : 4);
+
+    }
+
+    public boolean[] getDirection () {
+        var direction = new boolean[2]; // [0] - x; [1] - y; true - pos, false - neg
+        var incrementQuadrant = this.getQuadrant();
+        if (incrementQuadrant == 1) {
+            direction[0] = true;
+            direction[1] = true;
+        }
+        else if (incrementQuadrant == 2) {
+            direction[0] = false;
+            direction[1] = true;
+        }
+        else if (incrementQuadrant == 3) {
+            direction[0] = false;
+            direction[1] = false;
+        }
+        else {
+            direction[0] = true;
+            direction[1] = false;
+        }
+
+        return direction;
+    }
 
     /**
      *
@@ -110,4 +144,8 @@ public class Vector {
         return wayIsClear(field, pos, this, robotWidth);
     }
 
+
+    public static void main(String[] args) {
+        Vector a = Vector.CreateFromCartesian(24-25, 42-24);
+    }
 }

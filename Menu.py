@@ -36,7 +36,7 @@ class Link (object):
 
 class Ui_Dialog(object):
     
-    pixelCount = [63, 46] 
+    pixelCount = [63, 53] 
     
     gridHeight = 1030
     gridWidth = 824
@@ -104,7 +104,7 @@ class Ui_Dialog(object):
                             kinda_current = kinda_current.foll
                     #--------------------------------------------------------------------------
 
-        teamInfo = "(" + teamNumber + ", " + speed + ", " + shootingTime + "), \n"
+        teamInfo = "" + teamNumber + " " + speed + " " + shootingTime + "\n"
 
         path = [teamInfo]                            
         current = first
