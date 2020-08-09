@@ -11,11 +11,11 @@ To run the project, use src/Main.main()
 --
 -------
 
-As of 24th of July, 2020, the current version:
+As of 8th of August, 2020, the current version:
  - Creates a path that avoids walls and uses an entered size of robot cell to successfully navigate on the field
- - Needs around 200,000 trials to reliably derive a strategy that scores 20 points in autonomous
- - Has a graphic interface to enter allied robot's paths, but still does not take their paths into consideration
- - Has simplified physics that doesn't deny paths that may make the robot tip over
+ - Needs around 200,000 trials to reliably derive a strategy that scores 20 points in autonomous on a field with no other robots
+ - Has a graphic interface to enter allied robot's paths and takes these paths into consideration
+ - Has simplified physics that doesn't avoid paths that may make the robot tip over
  - Outputs the strategy into a csv file that stores angles and distances that robot turns/travels from each cell to the next one.
 
 -------
