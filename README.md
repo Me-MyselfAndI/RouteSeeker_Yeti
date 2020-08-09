@@ -41,7 +41,7 @@ sequence of moves, size of the robot cell, amount of cargo and robot's position.
    
    AllieSequenceRecords.java - similar class, but for allies. Instead of acceleration, stores velocity.
    
-   AlliedRobot.java - interprets and records trajectory that was written into the graphic interface.
+   AlliedRobot.java - interprets and records trajectory that was written into the graphic interface; handles all matters related to drawing allies' paths on the field.
    
    Main.java - does the majority of work. It includes the machine learning part of the code, and also describes the field. The principle by which 
 it works is the following:
