@@ -25,6 +25,7 @@ public class Robot {
         this.cargo = cargo;
         vel = new Vector(0, 0);
         this.field = field;
+        this.matchLength = matchLength;
     }
 
     /**

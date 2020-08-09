@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Main {
 
-    final static int amountOfTrials = 50000;
+    final static int amountOfTrials = 300000;
     final static double cargoConstant = 1.2;   // Strategic value of having one more cargo
     final static double matchTime = 15;        // Match time in seconds
     final static int tactAmount = 15;    // This is how many tacts there are in one match. IF YOU ARE CHZNGING THIS< ALSO CHANGE IN CELL.JAVA
@@ -358,7 +358,6 @@ public class Main {
             bestSequence.get(i).cell.type = "\u001B[31m" + (i+1) + "\u001B[0m";
         }
 
-        field = allies[0].markWholePath();
         for (int i = 0; i < allies[0].sequence.size(); ++i) {
             allies[0].sequence.get(i).cell.type = allies[0].sequence.get(i).cell.type.concat("\u001B[32m" + (i+1) + "\u001B[0m");
         }

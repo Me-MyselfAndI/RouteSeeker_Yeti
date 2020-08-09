@@ -90,7 +90,7 @@ public class AlliedRobot {
             earlyBoundaryIndex++;
             earlyBoundary = sequence.get(earlyBoundaryIndex);
             tempTime = earlyBoundary.time;
-            if (tempTime >= currTime - marginOfTimeError) {
+            if (tempTime >= currTime - marginOfTimeError || earlyBoundaryIndex == lateBoundaryIndex) {
                 break;
             }
         } while (tempTime < currTime);
@@ -134,6 +134,16 @@ public class AlliedRobot {
                     currCell.type = currCell.type.concat("r");
             }
         }
+
+
+        // Enable the following if you suspect that this function isn't working properly.
+        // Look at when and where the allie paths are marked
+        /*for (int i = 0; i < field.length; ++i) {
+            for (int j = 0; j < field[i].length; ++j)
+                System.out.print(field[i][j]);
+            System.out.println();
+        }*/
+
 
         return field;
     }
