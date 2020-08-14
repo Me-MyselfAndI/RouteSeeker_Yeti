@@ -19,9 +19,9 @@ public class Main {
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
+            {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
+            {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("l"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
-            {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
-            {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell(" "), new Cell("w"), new Cell("w"), new Cell("w")},
@@ -129,7 +129,7 @@ public class Main {
 
         // Now whe the loop reached the coordinate, it is the one we start from.
 
-        System.out.println(initCellXCoord);
+        // System.out.println(initCellXCoord);
         if (initCellXCoord < 4 || initCellXCoord > initLineValues.length - 4) { // You can trace a dangerous situation here
             // If the compiler got into this branch, it means it picked a wall as a starting point. That's bad - robot cannot start there.
             // Yet, nothing critical. That can never become a part of the output of the program. The reason is, such sequence is doomed
@@ -204,7 +204,9 @@ public class Main {
         allies[1] = allies[0];
 
         for (int trial = 1; trial <= amountOfTrials; ++trial) {
-
+            for (int i = 0; i < trial % 20; ++i)
+                System.out.print('_');
+            System.out.println("\n\n\t\tTrial: L-" + (amountOfTrials - trial));
             if (trial % 200000 == 1) {
                     // In order to prevent the initLineValues from slipping completely into an uneven system that prevents new strategies from appearing, we need to
                     // once in a while null them all
@@ -230,8 +232,6 @@ public class Main {
             // Creating the robot. The long expression of rand.nextInt(...) picks random cell except for the first and last one.
             Robot robot = new Robot (field, pickStartingPosition(initLine, initLineValues, totalInitLineValue), 20, 1, 3, tactAmount);
             double increment = matchTime/tactAmount; // This is an increment of time each "turn"
-            System.out.println("\n\n\t\tTrial: L-" + (amountOfTrials - trial));
-
 
             robot.move(increment, probabilisticConstant,  totalValue/(totalNonzeroValues + 1), tactAmount, allies);
 
@@ -278,7 +278,7 @@ public class Main {
 
 
 
-            System.out.println(output);
+            //System.out.println(output);
             totalScore += maxScore;    // Increasing the total score of all trials by this score
             robot.sequence.remove(robot.sequence.size() - 1);   // Now we remove the extra node that we added above
 
@@ -347,8 +347,8 @@ public class Main {
             }
             */
 
-            System.out.println("Score: " + score);
-            System.out.println("Average score per trial: " + ((double)Math.round(1000.0*totalScore/trial))/1000);
+            //System.out.println("Score: " + score);
+            //System.out.println("Average score per trial: " + ((double)Math.round(1000.0*totalScore/trial))/1000);
             System.out.println("Best score: " + bestScore);
             System.out.println("Number of best scores: " + numberOfBestScores);
         }
