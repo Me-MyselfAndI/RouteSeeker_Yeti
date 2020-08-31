@@ -7,7 +7,7 @@ The code is adjustable for each new year's game.
 
 -------
 
-To run the project, use src/Main.main()
+To run the project, use src/Main.java (Run main())
 --
 -------
 
