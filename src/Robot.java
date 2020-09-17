@@ -5,7 +5,7 @@ import static java.lang.Math.pow;
 
 
 public class Robot {
-    private double matchLength;
+    private double matchLength;               // How long in seconds the match continues
     private Cell[][] field;
     final private double robotDimension = 1.5;  // Here place an upper-estimate on possible length/width of a robot.
     final int maxCargo = 5;                   // Maximum cargo that the robot can hold
@@ -89,7 +89,7 @@ public class Robot {
             boolean cargoIsFree = true;                                 // This will store whether or not this cargo is still free to be used or it was loaded already
             /** Here we look through the arrayList of used cargo to see if this one is still free.
                 This was written in 2020, this year's game had only 4 balls initially on the field. If this year's
-                game has a lot of cargos all over the field, rewrite this. Make the field hold the data on whether or not the cargo was used on a particular cell
+                game has a lot of cargo all over the field, rewrite this. Make the field hold the data on whether or not the cargo was used on a particular cell
                 because otherwise this part will greatly slow down the program*/
             for (Cell temp : usedCargo) {                               // Look through the arrayList of used cargo.
                 if (temp.equals(pos)) {                                 // If you met this cell among the used cargo list, it means it has been taken.

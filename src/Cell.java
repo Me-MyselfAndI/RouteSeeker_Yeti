@@ -30,19 +30,22 @@ public class Cell {
         return "" + type;
     }
 
-    public boolean check (Cell[][] field, double dx, double dy) {
+    public boolean check (Cell[][] field, double dx, double dy) {   // Checks if there are any problems preventing the
+        // robot from moving with a particular trajectory
+        // It is CRUCIAL to first check for being inside the field. If not done first, you will have arrayLengthOutOfBounds
+        // errors when you check for robots or walls on the way
         return checkBeingInsideField(field, dx, dy) && checkForObstacles(field, dx, dy) && checkForRobots(field, dx, dy);
     }
 
-    public boolean checkBeingInsideField (Cell[][] field, double dx, double dy) {
+    public boolean checkBeingInsideField (Cell[][] field, double dx, double dy) {   // Checks if the proposed trajectory escapes the field
         return !((y + dy < 1 || y + dy >= field.length - 1) || (x + dx < 1 || x + dx >= field[0].length - 1));
     }
 
-    public boolean checkForObstacles (Cell[][] field, double dx, double dy) {    // Checks whether the cell is outside the field, and whether there is a wall/robot there
+    public boolean checkForObstacles (Cell[][] field, double dx, double dy) {    // Checks if there are any non-robot obstacles on the way
         return !field[(int) Math.round(y + dy)][(int) Math.round(x + dx)].type.equals("w");
     }
 
-    public boolean checkForRobots (Cell[][] field, double dx, double dy) {
+    public boolean checkForRobots (Cell[][] field, double dx, double dy) {  // Checks if there are allied robots on the way
         return (!field[(int) Math.round(y + dy)][(int) Math.round(x + dx)].type.contains("r"));
     }
 

@@ -230,7 +230,8 @@ public class Main {
             }
 
             // Creating the robot. The long expression of rand.nextInt(...) picks random cell except for the first and last one.
-            Robot robot = new Robot (field, pickStartingPosition(initLine, initLineValues, totalInitLineValue), 20, 1, 3, tactAmount);
+            Robot robot = new Robot (field, pickStartingPosition(initLine, initLineValues,
+                    totalInitLineValue), 20, 1, 3, tactAmount);
             double increment = matchTime/tactAmount; // This is an increment of time each "turn"
 
             robot.move(increment, probabilisticConstant,  totalValue/(totalNonzeroValues + 1), tactAmount, allies);

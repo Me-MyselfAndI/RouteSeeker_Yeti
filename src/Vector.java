@@ -144,8 +144,4 @@ public class Vector {
         return wayIsClear(field, pos, this, robotWidth);
     }
 
-
-    public static void main(String[] args) {
-        Vector a = Vector.CreateFromCartesian(24-25, 42-24);
-    }
 }
