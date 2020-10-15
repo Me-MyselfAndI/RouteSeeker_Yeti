@@ -46,12 +46,11 @@ sequence of moves, size of the robot cell, amount of cargo and robot's position.
    Main.java - does the majority of work. It includes the machine learning part of the code, and also describes the field. The principle by which 
 it works is the following:
 
-in each cell there is a so-called value-vector that points in the direction of the most probable high-scoring path. If the robot visited this cell, then the value-vector 
-gets mutated: depending on how large was the score at the end of the trial, the vector will be set closer (reward) or farther (punishment) from 
+In each cell there is a so-called value-vector that points in the direction of the most probable high-scoring path. If the robot visited this cell, then the value-vector 
+gets mutated: depending on how large was the score at the end of the trial, the vector will be set closer (reward) to or farther (punishment) from 
 the direction the robot moved from this cell. The direction of the vector is set to be the major factor that determines where a robot goes from there
-at any given trial, but there is some probability to allow new strategies to appear. This way after a large number of trials, the program will set the vectors to
-point in best possible directions (or at least get to a local maximum of posible scores). The program records every best attempt. In the end, the best of the best 
-is given back as an output.
+at any given trial, but there is some probability to allow for new strategies to appear. This way, after a large number of trials, the program will set the vectors to
+point in best possible directions (or at least get to a local maximum of posible scores). The program records every best attempt. In the end, the best of the best attempted paths is given back as an output.
 
 
 ------
@@ -61,8 +60,7 @@ is given back as an output.
 This project belongs to the FRC Team 3506 Yeti Robotics.
 
 Designed by Grigorii Podoksik
-
-Idea of Caedmon McGinn
+Idea of Caedmon McGinn and Grigorii Podoksik
 
 
 
