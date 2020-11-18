@@ -11,7 +11,7 @@ Last UPD: 11/18/2020: New GUI added. No map yet
 
 To run the path calculation, use src/Main.java (Run main())
 --
-To run the menu for path entering, use Menu.py
+To run the menu for path entering, use Menu/menu.py
 --
 -------
 
