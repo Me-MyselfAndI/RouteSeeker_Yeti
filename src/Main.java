@@ -87,7 +87,7 @@ public class Main {
         return field;
     }
 
-    /*static Cell[][] oldField = {        // w = Wall/obstacle;    l = Loading station;    s = suitable to Shoot;     i = Initiation line
+    static Cell[][] oldField = {        // w = Wall/obstacle;    l = Loading station;    s = suitable to Shoot;     i = Initiation line
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
@@ -151,9 +151,9 @@ public class Main {
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
             {new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w"), new Cell("w")},
-    };*/
+    };
 
-    static Cell[][] field = /*oldField*/createField(fieldScheme);
+    static Cell[][] field = oldField/*createField(fieldScheme)*/;
 
     /**
      * This whole thing is a mini-AI for picking the best starting point, based on Q-Learning.
@@ -240,7 +240,10 @@ public class Main {
 
         int initLine = 0;              // This needs to be outside of the loop, in order to be accessible later
 
-        for (; initLine < field.length && field[initLine][field[0].length/2].type.equals("i"); ++initLine);  // This finds initLine
+        for (; initLine < field.length && !field[initLine][field[0].length/2].type.equals("i"); ++initLine)  // This finds initLine
+        {
+            System.out.println(" " + initLine + " " + field[initLine][field[0].length/2].type.equals("i"));
+        }
 
         double bestScore = -1;      // This stores the best achieved score out of all trials
         ArrayList<RobotSequenceRecord> bestSequence = new ArrayList<>();   // This stores the sequence that achieved best possible score
@@ -273,7 +276,7 @@ public class Main {
 
 
         AlliedRobot[] allies = new AlliedRobot[2];
-        allies[0] = new AlliedRobot(field, "4290", 3, 1);
+        allies[0] = new AlliedRobot(field, "4290_1", 3, 1);
         allies[1] = allies[0];
 
         for (int trial = 1; trial <= amountOfTrials; ++trial) {
