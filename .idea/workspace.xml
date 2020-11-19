@@ -21,21 +21,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9f286a49-38db-4fac-abe6-b69fd8abf3a7" name="Default Changelist" comment="Added Java function that converts a 2D field string into the list of cells. Now, to create a field there is no need in writing one-by-one width*height individual cells">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Allies_strategies/4290.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Allies_strategies/4290_1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Menu/cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/Menu/cell.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Menu/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/Menu/menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RobotPath.csv" beforeDir="false" afterPath="$PROJECT_DIR$/RobotPath.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RouteSeeker__2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RouteSeeker__2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RouteSeeker__2/AlliedRobot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RouteSeeker__2/AlliedRobot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RouteSeeker__2/Allies_strategies/4290.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RouteSeeker__2/Allies_strategies/4290_1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RouteSeeker__2/Allies_strategies/4290_1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RouteSeeker__2/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RouteSeeker__2/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RouteSeeker__2/Menu/cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RouteSeeker__2/Menu/cell.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RouteSeeker__2/Menu/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RouteSeeker__2/Menu/menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RouteSeeker__2/RobotPath.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RouteSeeker__2/RobotPath.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AlliedRobot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AlliedRobot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,17 +55,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="RouteSeeker__2" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Python.menu">
     <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -90,6 +65,16 @@
       <option name="TEST_OBJECT" value="CLASS" />
       <properties />
       <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="RouteSeeker__2" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -117,13 +102,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Main" />
+      <item itemvalue="Python.menu" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -229,5 +209,8 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="512" y="211" key="run.anything.popup/0.0.1707.920@0.0.1707.920" timestamp="1605755983555" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/RouteSeeker_Yeti$menu.coverage" NAME="menu Coverage Results" MODIFIED="1605804903196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
